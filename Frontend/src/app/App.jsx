@@ -1,9 +1,13 @@
-import React from 'react'
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const App = () => {
-  return (
-    <div>App</div>
-  )
-}
+  const [res, setRes] = useState("");
+  useEffect(async () => {
+    const data = await axios.get("/api");
+    setRes(data.data.message);
+  }, []);
+  return <div>{res}</div>;
+};
 
-export default App
+export default App;
