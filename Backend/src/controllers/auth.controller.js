@@ -4,6 +4,7 @@ import config from "../config/config.js";
 import { sendMail } from "../services/mail.service.js";
 import { generateToken } from "../utils/generateToken.js";
 import { RegisterMail } from "../utils/regsiterEmail.js";
+import redis from "../config/cache.js";
 
 export const register = async (req, res) => {
   try {
@@ -26,7 +27,7 @@ export const register = async (req, res) => {
     await sendMail({
       to: user.email,
       subject: "Verify Your Email - Amanova AI",
-      html: RegisterMail({ verifyToken, verificationLink }),
+      html: RegisterMail({ verifyToken, verificationLink }), // Need to make this professional
     });
 
     res.status(201).json({
@@ -98,7 +99,7 @@ export const verify = async (req, res) => {
     user.verified = true;
     await user.save();
 
-    res.status(200).json({ message: "Email verified successfully" });
+    res.status(200).json({ message: "Email verified successfully" });  // Need to make this professional
   } catch (error) {
     console.error(error);
     return res.status(401).json({ message: "Invalid or expired token" });
@@ -114,6 +115,30 @@ export const getMe = async (req, res) => {
     res.status(200).json({ user });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    const token =
+      req.cookies?.token ||
+      (req.headers.authorization && req.headers.authorization.split(" ")[1]);
+
+    if (!token) {
+      return res.status(400).json({ message: "No token provided" });
+    }
+
+    await redis.set(token, Date.now().toString(), "EX", 24 * 60 * 60);
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+    });
+
+    res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    console.error("Logout error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

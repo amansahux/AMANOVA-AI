@@ -1,139 +1,265 @@
 export const RegisterMail = ({ verifyToken, verificationLink }) => {
-  return `<!DOCTYPE html>
+  return `
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Your Email - Amanova AI</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f7fa;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
+<style>
 
-        .header {
-            background-color: #4f46e5;
-            padding: 40px 20px;
-            text-align: center;
-        }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-        .header h1 {
-            color: #ffffff;
-            margin: 0;
-            font-size: 28px;
-        }
+body{
+background:#f3f6fb;
+font-family:Inter,Segoe UI,Arial,sans-serif;
+padding:40px 15px;
+}
 
-        .content {
-            padding: 40px 30px;
-            text-align: center;
-        }
+.wrapper{
+max-width:620px;
+margin:auto;
+}
 
-        .content h2 {
-            color: #1f2937;
-            font-size: 24px;
-            margin-bottom: 12px;
-        }
+.card{
 
-        .content p {
-            color: #6b7280;
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 24px;
-        }
+background:#ffffff;
+border-radius:24px;
+overflow:hidden;
 
-        .token-box {
-            background-color: #f3f4f6;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 24px 0;
-            display: inline-block;
-        }
+box-shadow:
+0 15px 45px rgba(0,0,0,.08);
 
-        .token-text {
-            font-size: 28px;
-            font-weight: 700;
-            color: #4f46e5;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
+}
 
-        .link-button {
-            display: inline-block;
-            background-color: #4f46e5;
-            color: #ffffff;
-            padding: 14px 32px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: background-color 0.2s;
-        }
+.header{
 
-        .link-button:hover {
-            background-color: #4338ca;
-        }
+background:linear-gradient(135deg,#6366f1,#8b5cf6);
 
-        .link-text {
-            color: #4f46e5;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 20px;
-            display: block;
-        }
+padding:60px 30px;
+text-align:center;
 
-        .footer {
-            background-color: #f5f7fa;
-            padding: 24px;
-            text-align: center;
-            border-top: 1px solid #e5e7eb;
-        }
+}
 
-        .footer p {
-            margin: 0;
-            font-size: 14px;
-            color: #9ca3af;
-        }
-    </style>
+.logo{
+
+font-size:34px;
+font-weight:800;
+color:white;
+letter-spacing:1px;
+
+}
+
+.tag{
+
+margin-top:12px;
+color:#ede9fe;
+font-size:15px;
+
+}
+
+.content{
+
+padding:50px 40px;
+
+}
+
+h2{
+
+color:#111827;
+font-size:30px;
+margin-bottom:15px;
+
+}
+
+p{
+
+font-size:16px;
+line-height:1.8;
+color:#6b7280;
+
+}
+
+.codeBox{
+
+margin:40px auto;
+padding:22px;
+background:#eef2ff;
+border:2px dashed #6366f1;
+border-radius:16px;
+text-align:center;
+
+}
+
+.code{
+
+font-size:34px;
+font-weight:800;
+letter-spacing:8px;
+color:#4f46e5;
+
+}
+
+.button{
+
+display:inline-block;
+margin-top:35px;
+padding:16px 40px;
+
+background:linear-gradient(135deg,#6366f1,#8b5cf6);
+
+color:white !important;
+text-decoration:none;
+font-size:17px;
+font-weight:700;
+
+border-radius:14px;
+
+}
+
+.small{
+
+margin-top:35px;
+font-size:14px;
+color:#9ca3af;
+
+word-break:break-all;
+
+}
+
+.link{
+
+color:#4f46e5;
+text-decoration:none;
+font-weight:600;
+
+}
+
+.footer{
+
+padding:30px;
+
+background:#111827;
+
+text-align:center;
+
+}
+
+.footer p{
+
+color:#d1d5db;
+font-size:14px;
+
+}
+
+.social{
+
+margin-top:15px;
+
+font-size:13px;
+color:#9ca3af;
+
+}
+
+</style>
+
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Amanova AI</h1>
-        </div>
 
-        <div class="content">
-            <h2>Verify Your Email Address</h2>
-            <p>Thank you for joining Amanova AI! Please verify your email address to complete your registration and get
-                started.</p>
+<div class="wrapper">
 
-            <div class="token-box">
-                <div class="token-text">${verifyToken}</div>
-            </div>
+<div class="card">
 
-            <p>Click the button below to verify your email:</p>
-            <a href="${verificationLink}" class="link-button">Verify Email</a>
+<div class="header">
 
-            <p style="margin-top: 24px;">Or, copy and paste this link into your browser:</p>
-            <a href="${verificationLink}" class="link-text">${verificationLink}</a>
+<div class="logo">
+🤖 Amanova AI
+</div>
 
-            <p style="margin-top: 24px;">If you didn't create this account, please ignore this email.</p>
-        </div>
+<div class="tag">
+Smart • Fast • Secure
+</div>
 
-        <div class="footer">
-            <p>© ${new Date().getFullYear()} Amanova AI. All rights reserved.</p>
-        </div>
-    </div>
+</div>
+
+<div class="content">
+
+<h2>Verify your email</h2>
+
+<p>
+
+Welcome to <b>Amanova AI</b> 🎉
+
+We're excited to have you onboard.
+
+Use the verification code below or simply click the button to activate your account.
+
+</p>
+
+<div class="codeBox">
+
+<div class="code">
+${verifyToken}
+</div>
+
+</div>
+
+<center>
+
+<a href="${verificationLink}" class="button">
+Verify Email →
+</a>
+
+</center>
+
+<p class="small">
+
+If the button doesn't work, copy this URL into your browser:
+
+<br><br>
+
+<a class="link" href="${verificationLink}">
+${verificationLink}
+</a>
+
+</p>
+
+<p class="small">
+
+This verification link will expire shortly for your security.
+
+If you didn't create an account, you can safely ignore this email.
+
+</p>
+
+</div>
+
+<div class="footer">
+
+<p>
+
+© ${new Date().getFullYear()} Amanova AI
+
+</p>
+
+<div class="social">
+
+Made with ❤️ for developers
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </body>
 
 </html>
