@@ -2,12 +2,8 @@ import userModel from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { sendMail } from "../services/mail.service.js";
-
-const generateToken = (userId, email, expiresIn = "24h") => {
-  return jwt.sign({ id: userId, email: email }, config.jwt_secret, {
-    expiresIn,
-  });
-};
+import { generateToken } from "../utils/generateToken.js";
+import { RegisterMail } from "../utils/regsiterEmail.js";
 
 export const register = async (req, res) => {
   try {
@@ -30,8 +26,7 @@ export const register = async (req, res) => {
     await sendMail({
       to: user.email,
       subject: "Verify Your Email - Amanova AI",
-
-      html: `<p>Please verify your email by clicking on the following link: <a href="${verificationLink}">Verify Email</a></p>`,
+      html: RegisterMail({ verifyToken, verificationLink }),
     });
 
     res.status(201).json({
@@ -46,7 +41,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, username , password } = req.body;
+    const { email, username, password } = req.body;
 
     const user = await userModel.findOne({ $or: [{ email }, { username }] });
     if (!user) {
@@ -67,6 +62,8 @@ export const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "lax",
+      secure: false,
     });
 
     res.status(200).json({

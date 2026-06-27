@@ -9,7 +9,10 @@ if (
     !process.env.GOOGLE_CLIENT_SECRET ||
     !process.env.GOOGLE_REFRESH_TOKEN ||
     !process.env.GOOGLE_USER_ID ||
-    !process.env.BASE_URL
+    !process.env.BASE_URL ||
+    !process.env.REDIS_HOST ||
+    !process.env.REDIS_PORT ||
+    !process.env.REDIS_PASSWORD
 ) {
   console.error("Missing required environment variables");
   process.exit(1);
@@ -23,5 +26,8 @@ const config = {
   google_client_secret: process.env.GOOGLE_CLIENT_SECRET,
   google_refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
   google_user_id: process.env.GOOGLE_USER_ID,
+  redis_host: process.env.REDIS_HOST,
+  redis_port: process.env.REDIS_PORT,
+  redis_password: process.env.REDIS_PASSWORD,
 };
 export default config;
