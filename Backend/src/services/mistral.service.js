@@ -2,7 +2,7 @@ import { ChatMistralAI } from "@langchain/mistralai";
 import config from "../config/config.js";
 
 const model = new ChatMistralAI({
-  model: "mistral-large-latest",
+  model: "mistral-small-latest",
   apiKey: config.mistral_api_key,
   temperature: 0
 });

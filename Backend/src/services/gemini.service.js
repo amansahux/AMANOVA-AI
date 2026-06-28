@@ -2,7 +2,7 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import config from "../config/config.js";
 
 const model = new ChatGoogleGenerativeAI({
-  model: "gemini-2.5-flash-lite",
+  model: "gemini-flash-lite",
   apiKey: config.gemini_api_key,
 });
 
