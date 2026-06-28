@@ -3,16 +3,18 @@ dotenv.config();
 
 if (
   !process.env.PORT ||
-    !process.env.MONGO_URI ||
-    !process.env.JWT_SECRET ||
-    !process.env.GOOGLE_CLIENT_ID ||
-    !process.env.GOOGLE_CLIENT_SECRET ||
-    !process.env.GOOGLE_REFRESH_TOKEN ||
-    !process.env.GOOGLE_USER_ID ||
-    !process.env.BASE_URL ||
-    !process.env.REDIS_HOST ||
-    !process.env.REDIS_PORT ||
-    !process.env.REDIS_PASSWORD
+  !process.env.MONGO_URI ||
+  !process.env.JWT_SECRET ||
+  !process.env.GOOGLE_CLIENT_ID ||
+  !process.env.GOOGLE_CLIENT_SECRET ||
+  !process.env.GOOGLE_REFRESH_TOKEN ||
+  !process.env.GOOGLE_USER_ID ||
+  !process.env.BASE_URL ||
+  !process.env.REDIS_HOST ||
+  !process.env.REDIS_PORT ||
+  !process.env.REDIS_PASSWORD ||
+  !process.env.GEMINI_API_KEY ||
+  !process.env.MISTRAL_API_KEY
 ) {
   console.error("Missing required environment variables");
   process.exit(1);
@@ -29,5 +31,7 @@ const config = {
   redis_host: process.env.REDIS_HOST,
   redis_port: process.env.REDIS_PORT,
   redis_password: process.env.REDIS_PASSWORD,
+  gemini_api_key: process.env.GEMINI_API_KEY,
+  mistral_api_key: process.env.MISTRAL_API_KEY,
 };
 export default config;
