@@ -19,7 +19,8 @@ if (
   !process.env.OPENROUTER_API_KEY ||
   !process.env.COHERE_API_KEY ||
   !process.env.CEREBRAS_API_KEY ||
-  !process.env.NVIDIA_API_KEY
+  !process.env.NVIDIA_API_KEY ||
+  !process.env.NODE_ENV
 ) {
   console.error("Missing required environment variables");
   process.exit(1);
@@ -43,5 +44,6 @@ const config = {
   cohere_api_key: process.env.COHERE_API_KEY,
   cerebras_api_key: process.env.CEREBRAS_API_KEY,
   nvidia_api_key: process.env.NVIDIA_API_KEY,
+  node_env: process.env.NODE_ENV,
 };
 export default config;

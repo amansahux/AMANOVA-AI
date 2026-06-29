@@ -14,9 +14,11 @@ export const register = async (req, res) => {
       $or: [{ email }, { username }],
     });
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: "User already exists with this email or username" });
+      return res.status(400).json({
+        success: false,
+        message: "User already exists with this email or username",
+        error: "User already exists",
+      });
     }
 
     const user = await userModel.create({ username, email, password });
@@ -38,7 +40,7 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    return next(error);
   }
 };
 
@@ -48,16 +50,28 @@ export const login = async (req, res) => {
 
     const user = await userModel.findOne({ $or: [{ email }, { username }] });
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials",
+        error: "Invalid credentials",
+      });
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials",
+        error: "Invalid credentials",
+      });
     }
 
     if (!user.verified) {
-      return res.status(400).json({ message: "Please verify your email" });
+      return res.status(400).json({
+        success: false,
+        message: "Please verify your email",
+        error: "Please verify your email",
+      });
     }
 
     const token = generateToken(user._id, user.email, "24h");
@@ -71,7 +85,7 @@ export const login = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Login successful",
+      message: "Login successfully",
       user: {
         id: user._id,
         username: user.username,
@@ -82,7 +96,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    return next(error);
   }
 };
 
@@ -97,7 +111,11 @@ export const verify = async (req, res) => {
     const user = await userModel.findById(decoded.id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: "User not found",
+      });
     }
 
     user.verified = true;
@@ -110,7 +128,7 @@ export const verify = async (req, res) => {
     }); // Need to make this professional
   } catch (error) {
     console.error(error);
-    return res.status(401).json({ message: "Invalid or expired token" });
+    return next(error);
   }
 };
 
@@ -118,19 +136,21 @@ export const getMe = async (req, res) => {
   try {
     const user = await userModel.findById(req.user.id).select("-password");
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "User fetched successfully",
-        user: user,
-        error: null,
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: "User not found",
       });
+    }
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      user: user,
+      error: null,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    return next(error);
   }
 };
 
@@ -141,7 +161,11 @@ export const logout = async (req, res) => {
       (req.headers.authorization && req.headers.authorization.split(" ")[1]);
 
     if (!token) {
-      return res.status(400).json({ message: "No token provided" });
+      return res.status(400).json({
+        success: false,
+        message: "No token provided",
+        error: "No token provided",
+      });
     }
 
     await redis.set(token, Date.now().toString(), "EX", 24 * 60 * 60);
@@ -156,6 +180,6 @@ export const logout = async (req, res) => {
       .json({ success: true, message: "Logout successful", error: null });
   } catch (error) {
     console.error("Logout error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return next(error);
   }
 };
