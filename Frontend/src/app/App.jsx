@@ -16,7 +16,7 @@ const App = () => {
       } catch (error) {
         console.error(error);
       } finally {
-        // dispatch(setIsHydrating(false));
+        dispatch(setIsHydrating(false));
       }
     };
     fetchData();
