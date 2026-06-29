@@ -8,11 +8,12 @@ const useAuth = () => {
   const loading = useSelector((state) => state.auth.loading);
   const error = useSelector((state) => state.auth.error);
 
+
   const register = async (payload) => {
     dispatch(setLoading(true));
     try {
       const res = await authAPI.register(payload);
-      dispatch(setUser(res.data));
+      return res
     } catch (error) {
       dispatch(setError(error.response.data.message));
     } finally {
@@ -23,8 +24,8 @@ const useAuth = () => {
     dispatch(setLoading(true));
     try {
       const res = await authAPI.login(payload);
-      dispatch(setUser(res.data));
-      return res.data;
+      dispatch(setUser(res.user));
+      return res;
     } catch (error) {
       dispatch(setError(error.response.data.message));
     } finally {
@@ -36,7 +37,7 @@ const useAuth = () => {
     try {
       const res = await authAPI.logout();
       dispatch(setUser(null));
-      return res.data;
+      return res;
     } catch (error) {
       dispatch(setError(error.response.data.message));
     } finally {
