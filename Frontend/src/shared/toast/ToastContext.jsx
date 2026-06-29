@@ -100,18 +100,6 @@ const Toast = ({ id, type = "info", message, onRemove }) => {
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{
           margin: 0,
-          fontSize: "13px",
-          fontWeight: "700",
-          color: "rgba(255,255,255,0.95)",
-          letterSpacing: "0.04em",
-          textTransform: "uppercase",
-          fontFamily: "'Inter', sans-serif",
-          marginBottom: "2px",
-        }}>
-          {config.label}
-        </p>
-        <p style={{
-          margin: 0,
           fontSize: "14px",
           fontWeight: "500",
           color: "rgba(255,255,255,0.9)",
