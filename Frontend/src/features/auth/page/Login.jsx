@@ -73,7 +73,7 @@ const Login = () => {
         
         <div className="text-center text-sm text-on-surface-variant pt-2">
           Don't have an account?{' '}
-          <Link to="/auth/register" className="text-primary hover:text-primary-glow transition-colors font-semibold">
+          <Link to="/register" className="text-primary hover:text-primary-glow transition-colors font-semibold">
             Register
           </Link>
         </div>

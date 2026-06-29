@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { sendMail } from "../services/mail.service.js";
 import { generateToken } from "../utils/generateToken.js";
-import { RegisterMail } from "../utils/regsiterEmail.js";
+import { RegisterMail } from "../utils/registerEmail.js";
 import redis from "../config/cache.js";
 
 export const register = async (req, res) => {
