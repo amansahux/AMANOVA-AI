@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { setLoading, setUser } from "../features/auth/state/auth.slice";
 import { useDispatch } from "react-redux";
+import { ToastProvider } from "../shared/toast/ToastContext";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -21,10 +22,13 @@ const App = () => {
     };
     fetchData();
   }, []);
+
   return (
-    <div className="w-full min-h-screen">
-      <Outlet />
-    </div>
+    <ToastProvider>
+      <div className="w-full min-h-screen">
+        <Outlet />
+      </div>
+    </ToastProvider>
   );
 };
 

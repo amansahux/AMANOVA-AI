@@ -9,10 +9,12 @@ import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
 import AuthError from "../components/AuthError";
 import { loginSchema } from "../validator/auth.validator";
+import useToast from "../../../shared/toast/useToast";
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { login, loading, error } = useAuth();
+  const toast = useToast();
 
   const {
     register,
@@ -30,7 +32,10 @@ const Login = () => {
 
     const res = await login(payload);
     if (res?.success) {
-    navigate("/dashboard")
+      toast.success("Welcome back....");
+      navigate("/dashboard");
+    } else {
+      toast.error(res?.message || "Invalid credentials. Please try again.");
     }
   };
 
