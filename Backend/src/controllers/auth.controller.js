@@ -31,8 +31,10 @@ export const register = async (req, res) => {
     });
 
     res.status(201).json({
+      success: true,
       message:
         "User registered successfully. Please check your email to verify your account.",
+      error: null,
     });
   } catch (error) {
     console.error(error);
@@ -68,6 +70,7 @@ export const login = async (req, res) => {
     });
 
     res.status(200).json({
+      success: true,
       message: "Login successful",
       user: {
         id: user._id,
@@ -75,6 +78,7 @@ export const login = async (req, res) => {
         email: user.email,
         verified: user.verified,
       },
+      error: null,
     });
   } catch (error) {
     console.error(error);
@@ -99,7 +103,11 @@ export const verify = async (req, res) => {
     user.verified = true;
     await user.save();
 
-    res.status(200).json({ message: "Email verified successfully" });  // Need to make this professional
+    res.status(200).json({
+      success: true,
+      error: null,
+      message: "Email verified successfully",
+    }); // Need to make this professional
   } catch (error) {
     console.error(error);
     return res.status(401).json({ message: "Invalid or expired token" });
@@ -112,7 +120,14 @@ export const getMe = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ user });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "User fetched successfully",
+        user: user,
+        error: null,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -136,7 +151,9 @@ export const logout = async (req, res) => {
       secure: false,
     });
 
-    res.status(200).json({ message: "Logout successful" });
+    res
+      .status(200)
+      .json({ success: true, message: "Logout successful", error: null });
   } catch (error) {
     console.error("Logout error:", error);
     res.status(500).json({ message: "Internal server error" });

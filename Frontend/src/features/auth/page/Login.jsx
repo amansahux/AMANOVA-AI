@@ -1,22 +1,17 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import useAuth from '../hook/useAuth';
 import AuthLayout from '../components/AuthLayout';
 import AuthInput from '../components/AuthInput';
 import PasswordInput from '../components/PasswordInput';
 import AuthButton from '../components/AuthButton';
 import AuthError from '../components/AuthError';
+import { loginSchema } from '../validator/auth.validator';
 
-const loginSchema = z.object({
-  identifier: z.string().min(1, 'Email or Username is required'),
-  password: z.string().min(1, 'Password is required')
-});
 
 const Login = () => {
-  const navigate = useNavigate();
   const { login, loading, error } = useAuth();
   
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -30,8 +25,8 @@ const Login = () => {
       : { username: data.identifier, password: data.password };
       
     const res = await login(payload);
-    if (res) {
-      navigate('/chat');
+    if (res.success) {
+     return <Navigate to="/dashboard" replace />;
     }
   };
 
