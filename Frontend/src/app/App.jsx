@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 
 const App = () => {
   const [res, setRes] = useState("");
-  useEffect(async () => {
+ useEffect(async () => {
     const data = await axios.get("/api");
     setRes(data.data.message);
-  }, []);
+  }, []); 
   return <div className="text-5xl">{res}</div>;
 };
 
