@@ -6,7 +6,7 @@ export function initSocket(httpServer) {
   io = new Server(httpServer, {
     cors: {
       origin: config.base_url,
-      Credential: true,
+      credentials: true,
     },
   });
 
