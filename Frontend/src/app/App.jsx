@@ -7,7 +7,7 @@ const App = () => {
     const data = await axios.get("/api");
     setRes(data.data.message);
   }, []);
-  return <div>{res}</div>;
+  return <div className="text-5xl">{res}</div>;
 };
 
 export default App;
