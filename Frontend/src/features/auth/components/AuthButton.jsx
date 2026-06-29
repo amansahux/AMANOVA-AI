@@ -8,7 +8,7 @@ const AuthButton = React.forwardRef(({ className, children, loading, disabled, .
       ref={ref}
       disabled={loading || disabled}
       className={cn(
-        "flex items-center justify-center w-full px-6 py-4 bg-primary text-on-primary font-semibold rounded-sm transition-all duration-300",
+        "flex items-center cursor-pointer justify-center w-full px-6 py-4 bg-primary text-on-primary font-semibold rounded-sm transition-all duration-300",
         "hover:drop-shadow-[0_0_20px_rgba(255,106,43,0.4)] disabled:opacity-70 disabled:hover:drop-shadow-none disabled:cursor-not-allowed",
         className
       )}
