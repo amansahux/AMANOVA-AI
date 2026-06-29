@@ -1,21 +1,17 @@
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Loader from "./Loader";
 
-const ProtectedRoute = ({children}) => {
-  const { user, loading } = useSelector((state) => state.auth);
+const ProtectedRoute = ({ children }) => {
+  const { user, isHydrating } = useSelector((state) => state.auth);
 
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        Loading...
-      </div>
-    );
+  if (isHydrating) {
+    return <Loader />;
   }
 
   if (!user) {
-  return <Navigate to="/login" replace />;
-}
-  
+    return <Navigate to="/login" replace />;
+  }
 
   return children;
 };

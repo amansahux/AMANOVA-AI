@@ -1,20 +1,19 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Loader from "./Loader";
 
-
-const PublicRoute = ({children}) => {
-  const { user, loading } = useSelector((state) => state.auth);
+const PublicRoute = ({ children }) => {
+  const { user, isHydrating } = useSelector((state) => state.auth);
   const location = useLocation();
 
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        Loading...
-      </div>
-    );
+  if (isHydrating) {
+    return <Loader />;
   }
 
-  if (user && (location.pathname === "/login" || location.pathname === "/register")) {
+  if (
+    user &&
+    (location.pathname === "/login" || location.pathname === "/register")
+  ) {
     return <Navigate to="/dashboard" replace />;
   }
 

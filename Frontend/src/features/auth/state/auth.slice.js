@@ -4,8 +4,9 @@ const authSlice = createSlice({
   name: "authSlice",
   initialState: {
     user: null,
-    loading: true,
+    loading: false,
     error: null,
+    isHydrating: true,
   },
 
   reducers: {
@@ -18,9 +19,12 @@ const authSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    setIsHydrating: (state, action) => {
+      state.isHydrating = action.payload;
+    },
   },
 });
 
-export const { setUser, setLoading, setError } = authSlice.actions;
+export const { setUser, setLoading, setError, setIsHydrating } = authSlice.actions;
 
 export default authSlice.reducer;
