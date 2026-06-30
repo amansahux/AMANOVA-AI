@@ -7,8 +7,4 @@ export const initializedSocketConnection = () => {
     console.log("Connected to Socket.IO Server " + socket.id);
   });
 
-  socket.on("disconnect", () => {
-    console.log("Disconnected from Socket.IO Server " + socket.id);
-  });
-
 };

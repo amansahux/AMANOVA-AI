@@ -17,7 +17,7 @@ const AuthInput = React.forwardRef(({ className, label, error, ...props }, ref) 
       <input
         ref={ref}
         className={cn(
-          "bg-[#101010] border-b-2 border-surface-container-high px-4 py-3 text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors duration-300 w-full",
+          "bg-[#FEFEFE] border-b-2 border-[#ADABAA] px-4 py-3 text-[#5F5E5E] placeholder:text-[#ADABAA] focus:outline-none focus:border-primary transition-colors duration-300 w-full",
           error && "border-error focus:border-error",
           className
         )}
