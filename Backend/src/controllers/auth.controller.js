@@ -5,8 +5,9 @@ import { sendMail } from "../services/mail.service.js";
 import { generateToken } from "../utils/generateToken.js";
 import { RegisterMail } from "../utils/registerEmail.js";
 import redis from "../config/cache.js";
+import ApiError from "../utils/ApiError.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
 
@@ -14,11 +15,9 @@ export const register = async (req, res) => {
       $or: [{ email }, { username }],
     });
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists with this email or username",
-        error: "User already exists",
-      });
+      return next(
+        new ApiError("User already exists with this email or username", 400),
+      );
     }
 
     const user = await userModel.create({ username, email, password });
@@ -44,34 +43,22 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const { email, username, password } = req.body;
 
     const user = await userModel.findOne({ $or: [{ email }, { username }] });
     if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid credentials",
-        error: "Invalid credentials",
-      });
+      return next(new ApiError("Invalid credentials", 400));
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid credentials",
-        error: "Invalid credentials",
-      });
+      return next(new ApiError("Invalid credentials", 400));
     }
 
     if (!user.verified) {
-      return res.status(400).json({
-        success: false,
-        message: "Please verify your email",
-        error: "Please verify your email",
-      });
+      return next(new ApiError("Please verify your email", 400));
     }
 
     const token = generateToken(user._id, user.email, "24h");
@@ -100,7 +87,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const verify = async (req, res) => {
+export const verify = async (req, res, next) => {
   try {
     const { token } = req.query;
     if (!token) {
@@ -111,11 +98,7 @@ export const verify = async (req, res) => {
     const user = await userModel.findById(decoded.id);
 
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-        error: "User not found",
-      });
+      return next(new ApiError("Invalid or expired verification link", 404));
     }
 
     user.verified = true;
@@ -123,8 +106,8 @@ export const verify = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      error: null,
       message: "Email verified successfully",
+      error: null,
     }); // Need to make this professional
   } catch (error) {
     console.error(error);
@@ -132,15 +115,11 @@ export const verify = async (req, res) => {
   }
 };
 
-export const getMe = async (req, res) => {
+export const getMe = async (req, res, next) => {
   try {
     const user = await userModel.findById(req.user.id).select("-password");
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-        error: "User not found",
-      });
+      return next(new ApiError("Invalid credentials", 404));
     }
     res.status(200).json({
       success: true,
@@ -154,18 +133,14 @@ export const getMe = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+export const logout = async (req, res, next) => {
   try {
     const token =
       req.cookies?.token ||
       (req.headers.authorization && req.headers.authorization.split(" ")[1]);
 
     if (!token) {
-      return res.status(400).json({
-        success: false,
-        message: "No token provided",
-        error: "No token provided",
-      });
+      return next(new ApiError("No token provided", 400));
     }
 
     await redis.set(token, Date.now().toString(), "EX", 24 * 60 * 60);

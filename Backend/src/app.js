@@ -3,6 +3,7 @@ import authRouter from "./routes/auth.routes.js";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/error.middleware.js";
+import chatRoutes from "./routes/chat.routes.js";
 const app = express();
 app.use(express.json())
 app.use(morgan("dev"))
@@ -15,6 +16,7 @@ app.get("/api", (req, res) => {
 //Routes
 
 app.use("/api/auth", authRouter)
+app.use("/api/chats", chatRoutes)
 
 
 
