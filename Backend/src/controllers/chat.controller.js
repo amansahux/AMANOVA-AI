@@ -6,7 +6,7 @@ import ApiError from "../utils/ApiError.js";
 export const sendMessage = async (req, res, next) => {
   try {
     const { content, chatId } = req.body;
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     let title,
       chat = null;
@@ -59,7 +59,7 @@ export const sendMessage = async (req, res, next) => {
 
 export const getChats = async (req, res, next) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
     const chats = await chatModel.find({
       user: userId,
     });
@@ -80,7 +80,7 @@ export const getChats = async (req, res, next) => {
 
 export const getMessages = async (req, res, next) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
     const chatId = req.params.chatId;
 
     // 1. Validate Chat Belongs to User
@@ -119,7 +119,7 @@ export const deleteChat = async (req, res, next) => {
     }
     await chatModel.findOneAndDelete({
       _id: chatId,
-      user: req.user._id,
+      user: req.user.id,
     });
     await messageModel.deleteMany({ chat: chatId });
     return res.status(200).json({ message: "Chat deleted successfully" });
