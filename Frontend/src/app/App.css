@@ -1,4 +1,7 @@
 @import "tailwindcss";
+*::-webkit-scrollbar{
+  display: none;
+}
 
 @theme {
   --color-surface-dim: #131313;

@@ -7,6 +7,8 @@ import AuthInput from "../components/AuthInput";
 import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
 import AuthError from "../components/AuthError";
+import AuthDivider from "../components/AuthDivider";
+import GoogleButton from "../components/GoogleButton";
 import { registerSchema } from "../validator/auth.validator";
 import useToast from "../../../shared/toast/useToast";
 
@@ -68,10 +70,14 @@ const Register = () => {
           </AuthButton>
         </div>
 
+        <AuthDivider text="OR" />
+
+        <GoogleButton />
+
         <div className="text-center text-sm text-on-surface-variant pt-2">
           Already have an account?{" "}
-          <Link to="/login" className="text-primary hover:text-primary-glow transition-colors font-semibold">
-            Login
+          <Link to="/login" className="text-[#F5A623] hover:text-[#FFB940] transition-colors font-semibold">
+            Sign In
           </Link>
         </div>
       </form>
