@@ -19,7 +19,7 @@ export const sendMessage = async (req, res, next) => {
       });
     }
 
-    const message = await messageModel.create({
+    const userMessage = await messageModel.create({
       chat: chatId || chat._id,
       content: content,
       role: "user",
@@ -28,14 +28,22 @@ export const sendMessage = async (req, res, next) => {
     const messages = await messageModel.find({
       chat: chatId || chat._id,
     });
-    const AiResponse = await GenerateResponse(messages);
+    let AiResponse = null;
+    try {
+      AiResponse = await GenerateResponse(messages);
+    } catch (error) {
+      return res.status(503).json({
+        success: false,
+        message: "AI service unavailable try again later",
+        error: error.message,
+      });
+    }
 
     const AiMessage = await messageModel.create({
       chat: chatId || chat._id,
       content: AiResponse,
       role: "ai",
     });
-
     return res.status(200).json({
       success: true,
       data: {
