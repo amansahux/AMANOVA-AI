@@ -6,11 +6,13 @@ import {
   getMessages,
   deleteChat,
 } from "../controllers/chat.controller.js";
+import { validate } from "../middleware/zod.middleware.js";
+import { ChatValidator } from "../validator/chat.validator.js";
 const chatRoutes = Router();
 
-chatRoutes.post("/message", authMiddleware, sendMessage);
+chatRoutes.post("/send-message", authMiddleware, validate(ChatValidator), sendMessage);
 chatRoutes.get("/", authMiddleware, getChats);
 chatRoutes.get("/:chatId/messages", authMiddleware, getMessages);
-chatRoutes.delete("/:chatId/delete", authMiddleware, deleteChat);
+chatRoutes.delete("/:chatId", authMiddleware, deleteChat);
 
 export default chatRoutes;

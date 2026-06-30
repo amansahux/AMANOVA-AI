@@ -1,8 +1,61 @@
 import chatModel from "../models/chat.model.js";
 import messageModel from "../models/message.model.js";
+import { generateChatTitle, GenerateResponse } from "../services/ai.service.js";
 import ApiError from "../utils/ApiError.js";
 
-export const sendMessage = async (req, res, next) => {};
+export const sendMessage = async (req, res, next) => {
+  try {
+    const { content, chatId } = req.body;
+    const userId = req.user._id;
+
+    let title,
+      chat = null;
+
+    if (!chatId) {
+      title = await generateChatTitle(content);
+      chat = await chatModel.create({
+        user: userId,
+        title: title,
+      });
+    }
+
+    const message = await messageModel.create({
+      chat: chatId || chat._id,
+      content: content,
+      role: "user",
+    });
+
+    const messages = await messageModel.find({
+      chat: chatId || chat._id,
+    });
+    const AiResponse = await GenerateResponse(messages);
+
+    const AiMessage = await messageModel.create({
+      chat: chatId || chat._id,
+      content: AiResponse,
+      role: "ai",
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        chat: {
+          id: chatId || chat._id,
+          title: title,
+        },
+        message: {
+          id: AiMessage._id,
+          content: AiMessage.content,
+          role: AiMessage.role,
+        },
+      },
+      error: null,
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
 
 export const getChats = async (req, res, next) => {
   try {
@@ -64,14 +117,10 @@ export const deleteChat = async (req, res, next) => {
     if (!chatId) {
       return next(new ApiError("Chat ID is required", 400));
     }
-
-    const chat = await chatModel.findOneAndDelete({
-      chat: chatId,
+    await chatModel.findOneAndDelete({
+      _id: chatId,
       user: req.user._id,
     });
-    if (!chat) {
-      throw new ApiError("Chat not found", 404);
-    }
     await messageModel.deleteMany({ chat: chatId });
     return res.status(200).json({ message: "Chat deleted successfully" });
   } catch (error) {
