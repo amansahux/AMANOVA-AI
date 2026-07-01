@@ -85,6 +85,8 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
   } = useChat();
   const { user, logout } = useAuth();
   const dispatch = useDispatch();
+  // console.log(chats)
+
 
   const filteredChats = chats.filter((chat) =>
     (chat.title || "New Chat")

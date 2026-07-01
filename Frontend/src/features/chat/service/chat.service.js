@@ -14,7 +14,7 @@ const sendMessage = async ({ content, chatId }) => {
     }
 
     const { data } = await API.post("/send-message", payload);
-    return data;
+    return data.data;
   } catch (error) {
     throw error;
   }
@@ -23,7 +23,7 @@ const sendMessage = async ({ content, chatId }) => {
 const getMessages = async ({ chatId }) => {
   try {
     const { data } = await API.get(`/${chatId}/messages`);
-    return data;
+    return data.data;
   } catch (error) {
     throw error;
   }
@@ -32,7 +32,7 @@ const getMessages = async ({ chatId }) => {
 const getChats = async () => {
   try {
     const { data } = await API.get("/");
-    return data;
+    return data.data;
   } catch (error) {
     throw error;
   }
