@@ -1,16 +1,136 @@
 import React, { useState, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Plus, Search, MessageCircle, Trash2,
-  Settings, LogOut, X, Sparkles,
+  Plus,
+  Search,
+  MessageCircle,
+  Trash2,
+  Settings,
+  LogOut,
+  X,
+  Sparkles,
+  AlertTriangle,
 } from "lucide-react";
 import useChat from "../hook/useChat";
 import useAuth from "../../auth/hook/useAuth";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCurrentChat } from "../state/chat.service";
 
+/* ─── Delete Confirm Modal ────────────────────────────── */
+const DeleteConfirmModal = memo(({ chatTitle, onConfirm, onCancel }) => (
+  <AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onCancel}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.92, y: 12 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-sm rounded-2xl border border-[#2a2a2a] bg-[#131313] shadow-[0_24px_60px_rgba(0,0,0,0.6)] p-6 flex flex-col gap-5"
+      >
+        {/* Icon */}
+        <div className="flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-red-500/10 border border-red-500/20">
+            <AlertTriangle size={22} className="text-red-400" />
+          </div>
+        </div>
+
+        {/* Text */}
+        <div className="text-center space-y-1.5">
+          <h2 className="text-[#e5e2e1] text-base font-semibold">
+            Delete Chat?
+          </h2>
+          <p className="text-[#a98a7f] text-sm leading-relaxed">
+            <span className="text-[#e5e2e1] font-medium">{chatTitle} </span>
+            will be permanently deleted. This action cannot be undone.
+          </p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2.5">
+          <button
+            onClick={onCancel}
+            className="flex-1 py-2.5 rounded-xl text-sm font-medium text-[#a98a7f] bg-[#1c1b1b] border border-[#2a2a2a] hover:bg-[#201f1f] hover:text-[#e5e2e1] hover:border-[#353534] transition-all duration-150"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white bg-red-500/80 hover:bg-red-500 border border-red-500/30 hover:border-red-500/60 hover:shadow-[0_4px_14px_rgba(239,68,68,0.3)] transition-all duration-150"
+          >
+            Delete
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  </AnimatePresence>
+));
+DeleteConfirmModal.displayName = "DeleteConfirmModal";
+
+/* ─── Logout Confirm Modal ────────────────────────────── */
+const LogoutConfirmModal = memo(({ onConfirm, onCancel }) => (
+  <AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onCancel}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.92, y: 12 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-sm rounded-2xl border border-[#2a2a2a] bg-[#131313] shadow-[0_24px_60px_rgba(0,0,0,0.6)] p-6 flex flex-col gap-5"
+      >
+        {/* Icon */}
+        <div className="flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#FFBA44]/10 border border-[#FFBA44]/20">
+            <LogOut size={22} className="text-[#FFBA44]" />
+          </div>
+        </div>
+
+        {/* Text */}
+        <div className="text-center space-y-1.5">
+          <h2 className="text-[#e5e2e1] text-base font-semibold">Sign out?</h2>
+          <p className="text-[#a98a7f] text-sm leading-relaxed">
+            You will be signed out of your account. Any unsaved changes will be lost.
+          </p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2.5">
+          <button
+            onClick={onCancel}
+            className="flex-1 cursor-pointer py-2.5 rounded-xl text-sm font-medium text-[#a98a7f] bg-[#1c1b1b] border border-[#2a2a2a] hover:bg-[#201f1f] hover:text-[#e5e2e1] hover:border-[#353534] transition-all duration-150"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-2.5 rounded-xl cursor-pointer text-sm font-semibold text-[#050505] bg-[#FFBA44] hover:bg-[#ffca6e] border border-[#FFBA44]/40 hover:shadow-[0_4px_14px_rgba(255,186,68,0.35)] transition-all duration-150"
+          >
+            Sign out
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  </AnimatePresence>
+));
+LogoutConfirmModal.displayName = "LogoutConfirmModal";
+
 /* ─── Chat List Item ──────────────────────────────────── */
-const ChatItem = memo(({ chat, isActive, onSelect, onDelete }) => {
+const ChatItem = memo(({ chat, isActive, onSelect, onRequestDelete }) => {
   const [showDelete, setShowDelete] = useState(false);
 
   return (
@@ -23,9 +143,10 @@ const ChatItem = memo(({ chat, isActive, onSelect, onDelete }) => {
       onMouseEnter={() => setShowDelete(true)}
       onMouseLeave={() => setShowDelete(false)}
       className={`group relative flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-all duration-150
-        ${isActive
-          ? "bg-[#FFBA44]/10 border border-[#FFBA44]/20"
-          : "border border-transparent hover:bg-[#1c1b1b]"
+        ${
+          isActive
+            ? "bg-[#FFBA44]/10 border border-[#FFBA44]/20"
+            : "border border-transparent hover:bg-[#1c1b1b]"
         }`}
     >
       <MessageCircle
@@ -37,7 +158,7 @@ const ChatItem = memo(({ chat, isActive, onSelect, onDelete }) => {
           isActive ? "text-[#FFBA44] font-medium" : "text-[#e5e2e1] font-normal"
         }`}
       >
-        {chat.title || "New Chat"}
+        {(chat.title ?? "").replace(/^"|"$/g, "")}
       </span>
 
       <AnimatePresence>
@@ -47,8 +168,11 @@ const ChatItem = memo(({ chat, isActive, onSelect, onDelete }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.1 }}
-            onClick={(e) => { e.stopPropagation(); onDelete(chat._id || chat.id); }}
-            className="shrink-0 p-1 rounded-lg text-[#a98a7f] hover:bg-red-500/20 hover:text-red-400 transition-all duration-150"
+            onClick={(e) => {
+              e.stopPropagation();
+              onRequestDelete(chat);
+            }}
+            className="shrink-0 p-1 cursor-pointer rounded-lg text-[#a98a7f] hover:bg-red-500/20 hover:text-red-400 transition-all duration-150"
           >
             <Trash2 size={13} />
           </motion.button>
@@ -62,13 +186,23 @@ ChatItem.displayName = "ChatItem";
 /* ─── Sidebar ─────────────────────────────────────────── */
 const Sidebar = ({ isOpen, onClose, isMobile }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [pendingDelete, setPendingDelete] = useState(null); // { id, title }
+  const [pendingLogout, setPendingLogout] = useState(false);
 
-  const { chats, currentChat, handleGetMessages, handleDeleteChat, isLoadingChats } = useChat();
+  const {
+    chats,
+    currentChat,
+    handleGetMessages,
+    handleDeleteChat,
+    isLoadingChats,
+  } = useChat();
   const { user, logout } = useAuth();
   const dispatch = useDispatch();
 
   const filteredChats = (chats ?? []).filter((chat) =>
-    (chat.title ?? "New Chat").toLowerCase().includes((searchQuery ?? "").toLowerCase())
+    (chat.title ?? "New Chat")
+      .toLowerCase()
+      .includes((searchQuery ?? "").toLowerCase()),
   );
 
   const handleSelectChat = useCallback(
@@ -76,13 +210,22 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
       handleGetMessages({ chatId: chat._id || chat.id });
       if (isMobile && onClose) onClose();
     },
-    [handleGetMessages, isMobile, onClose]
+    [handleGetMessages, isMobile, onClose],
   );
 
-  const handleDeleteChatItem = useCallback(
-    (chatId) => handleDeleteChat({ chatId }),
-    [handleDeleteChat]
-  );
+  /* Open the confirm modal instead of deleting directly */
+  const handleRequestDelete = useCallback((chat) => {
+    setPendingDelete({
+      id: chat._id || chat.id,
+      title: (chat.title ?? "New Chat").replace(/^"|"$/g, ""),
+    });
+  }, []);
+
+  /* Confirmed — actually delete */
+  const handleConfirmDelete = useCallback(() => {
+    if (pendingDelete?.id) handleDeleteChat({ chatId: pendingDelete.id });
+    setPendingDelete(null);
+  }, [pendingDelete, handleDeleteChat]);
 
   const handleNewChat = useCallback(() => {
     dispatch(setCurrentChat(null));
@@ -92,10 +235,8 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
   /* ── Shared sidebar DOM ── */
   const sidebarContent = (
     <div className="flex flex-col h-full w-[280px] bg-[#0e0e0e]">
-
       {/* TOP — Fixed */}
       <div className="flex-none px-4 pt-5 pb-3 space-y-3">
-
         {/* Logo row */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2.5">
@@ -129,7 +270,10 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
 
         {/* Search */}
         <div className="relative mt-3">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a98a7f] pointer-events-none" />
+          <Search
+            size={14}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a98a7f] pointer-events-none"
+          />
           <input
             type="text"
             placeholder="Search chats..."
@@ -152,7 +296,10 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
         {isLoadingChats ? (
           <div className="flex flex-col gap-2 px-1">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-9 rounded-xl animate-pulse bg-[#1c1b1b]" />
+              <div
+                key={i}
+                className="h-9 rounded-xl animate-pulse bg-[#1c1b1b]"
+              />
             ))}
           </div>
         ) : filteredChats.length === 0 ? (
@@ -173,7 +320,7 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
                   currentChat?.chat?._id === (chat._id || chat.id)
                 }
                 onSelect={handleSelectChat}
-                onDelete={handleDeleteChatItem}
+                onRequestDelete={handleRequestDelete}
               />
             ))}
           </AnimatePresence>
@@ -182,17 +329,20 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
 
       {/* BOTTOM — Fixed */}
       <div className="flex-none px-3 pb-4 pt-2 border-t border-[#201f1f]">
-
         {/* Profile row */}
         <div className="flex items-center gap-3 px-2 py-2.5 rounded-xl mb-1 cursor-pointer hover:bg-[#1c1b1b] transition-all duration-150">
           <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 text-white bg-gradient-to-br from-[#FFBA44] to-[#ff7d3c]">
-            {user?.name?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || "A"}
+            {user?.name?.[0]?.toUpperCase() ||
+              user?.username?.[0]?.toUpperCase() ||
+              "A"}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate text-[#e5e2e1]">
               {user?.name || user?.username || "User"}
             </p>
-            <p className="text-xs truncate text-[#a98a7f]">{user?.email || ""}</p>
+            <p className="text-xs truncate text-[#a98a7f]">
+              {user?.email || ""}
+            </p>
           </div>
         </div>
 
@@ -203,8 +353,8 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
             Settings
           </button>
           <button
-            onClick={logout}
-            className="flex-1 flex items-center justify-center gap-2 py-2 text-xs rounded-lg text-[#a98a7f] hover:bg-red-500/10 hover:text-red-400 transition-all duration-150"
+            onClick={() => setPendingLogout(true)}
+            className="flex-1 flex cursor-pointer items-center justify-center gap-2 py-2 text-xs rounded-lg text-[#a98a7f] hover:bg-red-500/10 hover:text-red-400 transition-all duration-150"
           >
             <LogOut size={14} />
             Logout
@@ -217,37 +367,75 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
   /* Mobile drawer */
   if (isMobile) {
     return (
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={onClose}
-              className="fixed inset-0 z-40 bg-black/60"
-            />
-            <motion.div
-              initial={{ x: -280 }}
-              animate={{ x: 0 }}
-              exit={{ x: -280 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed left-0 top-0 bottom-0 z-50 overflow-hidden shadow-[4px_0_24px_rgba(0,0,0,0.4)]"
-            >
-              {sidebarContent}
-            </motion.div>
-          </>
+      <>
+        <AnimatePresence>
+          {isOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={onClose}
+                className="fixed inset-0 z-40 bg-black/60"
+              />
+              <motion.div
+                initial={{ x: -280 }}
+                animate={{ x: 0 }}
+                exit={{ x: -280 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="fixed left-0 top-0 bottom-0 z-50 overflow-hidden shadow-[4px_0_24px_rgba(0,0,0,0.4)]"
+              >
+                {sidebarContent}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Delete modal — outside drawer so it's always on top */}
+        {pendingDelete && (
+          <DeleteConfirmModal
+            chatTitle={pendingDelete.title}
+            onConfirm={handleConfirmDelete}
+            onCancel={() => setPendingDelete(null)}
+          />
         )}
-      </AnimatePresence>
+
+        {/* Logout modal */}
+        {pendingLogout && (
+          <LogoutConfirmModal
+            onConfirm={() => { setPendingLogout(false); logout(); }}
+            onCancel={() => setPendingLogout(false)}
+          />
+        )}
+      </>
     );
   }
 
   /* Desktop static */
   return (
-    <div className="relative flex-none h-full overflow-hidden border-r border-[#201f1f]">
-      {sidebarContent}
-    </div>
+    <>
+      <div className="relative flex-none h-full overflow-hidden border-r border-[#201f1f]">
+        {sidebarContent}
+      </div>
+
+      {/* Delete modal — rendered outside sidebar column */}
+      {pendingDelete && (
+        <DeleteConfirmModal
+          chatTitle={pendingDelete.title}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setPendingDelete(null)}
+        />
+      )}
+
+      {/* Logout modal */}
+      {pendingLogout && (
+        <LogoutConfirmModal
+          onConfirm={() => { setPendingLogout(false); logout(); }}
+          onCancel={() => setPendingLogout(false)}
+        />
+      )}
+    </>
   );
 };
 
