@@ -51,6 +51,7 @@ const ChatItem = memo(({ chat, isActive, onSelect, onRequestDelete }) => {
 
         <button
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             onRequestDelete(chat);
           }}
@@ -104,10 +105,17 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
   }, []);
 
   /* Confirmed — actually delete */
-  const handleConfirmDelete = useCallback(() => {
-    if (pendingDelete?.id) handleDeleteChat({ chatId: pendingDelete.id });
+  const handleConfirmDelete = useCallback(async () => {
+    if (pendingDelete?.id) {
+      await handleDeleteChat({ chatId: pendingDelete.id });
+      // If we deleted the chat we are currently viewing, go back to home
+      if (chatId === pendingDelete.id) {
+        dispatch(setCurrentChat(null));
+        navigate("/");
+      }
+    }
     setPendingDelete(null);
-  }, [pendingDelete, handleDeleteChat]);
+  }, [pendingDelete, handleDeleteChat, chatId, navigate, dispatch]);
 
   const handleNewChat = useCallback(() => {
     dispatch(setCurrentChat(null));
