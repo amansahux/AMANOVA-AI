@@ -31,8 +31,6 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    successRedirect:
-      `${config.base_url}/dashboard` || "http://localhost:5173/dashboard",
     failureRedirect:
       `${config.base_url}/login` || "http://localhost:5173/login",
   }),

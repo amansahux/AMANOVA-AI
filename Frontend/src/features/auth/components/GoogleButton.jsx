@@ -3,7 +3,7 @@ import { cn } from "./AuthInput";
 
 const GoogleButton = ({ className, ...props }) => {
   return (
-    <a href="localhost:3000/api/auth/google">
+    <a href="http://localhost:3000/api/auth/google">
       <button
         type="button"
         className={cn(
@@ -40,7 +40,7 @@ const GoogleButton = ({ className, ...props }) => {
             d="M24 47c5.53 0 10.18-1.83 13.57-4.96l-7.18-5.57C28.57 37.88 26.42 38.5 24 38.5c-6.39 0-11.85-3.84-13.71-9.24l-7.76 6.47C6.97 41.58 14.82 47 24 47z"
           />
         </svg>
-        Continue with Googlewa
+        Continue with Google
       </button>
     </a>
   );
