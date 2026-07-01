@@ -15,119 +15,9 @@ import useChat from "../hook/useChat";
 import useAuth from "../../auth/hook/useAuth";
 import { useDispatch } from "react-redux";
 import { setCurrentChat } from "../state/chat.service";
+import ConfirmModal from "./ConfirmModal";
 
-/* ─── Delete Confirm Modal ────────────────────────────── */
-const DeleteConfirmModal = memo(({ chatTitle, onConfirm, onCancel }) => (
-  <AnimatePresence>
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.15 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-      onClick={onCancel}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.92, y: 12 }}
-        transition={{ duration: 0.18, ease: "easeOut" }}
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl border border-[#2a2a2a] bg-[#131313] shadow-[0_24px_60px_rgba(0,0,0,0.6)] p-6 flex flex-col gap-5"
-      >
-        {/* Icon */}
-        <div className="flex items-center justify-center">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-red-500/10 border border-red-500/20">
-            <AlertTriangle size={22} className="text-red-400" />
-          </div>
-        </div>
 
-        {/* Text */}
-        <div className="text-center space-y-1.5">
-          <h2 className="text-[#e5e2e1] text-base font-semibold">
-            Delete Chat?
-          </h2>
-          <p className="text-[#a98a7f] text-sm leading-relaxed">
-            <span className="text-[#e5e2e1] font-medium">{chatTitle} </span>
-            will be permanently deleted. This action cannot be undone.
-          </p>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2.5">
-          <button
-            onClick={onCancel}
-            className="flex-1 py-2.5 rounded-xl text-sm font-medium text-[#a98a7f] bg-[#1c1b1b] border border-[#2a2a2a] hover:bg-[#201f1f] hover:text-[#e5e2e1] hover:border-[#353534] transition-all duration-150"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white bg-red-500/80 hover:bg-red-500 border border-red-500/30 hover:border-red-500/60 hover:shadow-[0_4px_14px_rgba(239,68,68,0.3)] transition-all duration-150"
-          >
-            Delete
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
-  </AnimatePresence>
-));
-DeleteConfirmModal.displayName = "DeleteConfirmModal";
-
-/* ─── Logout Confirm Modal ────────────────────────────── */
-const LogoutConfirmModal = memo(({ onConfirm, onCancel }) => (
-  <AnimatePresence>
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.15 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-      onClick={onCancel}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.92, y: 12 }}
-        transition={{ duration: 0.18, ease: "easeOut" }}
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl border border-[#2a2a2a] bg-[#131313] shadow-[0_24px_60px_rgba(0,0,0,0.6)] p-6 flex flex-col gap-5"
-      >
-        {/* Icon */}
-        <div className="flex items-center justify-center">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#FFBA44]/10 border border-[#FFBA44]/20">
-            <LogOut size={22} className="text-[#FFBA44]" />
-          </div>
-        </div>
-
-        {/* Text */}
-        <div className="text-center space-y-1.5">
-          <h2 className="text-[#e5e2e1] text-base font-semibold">Sign out?</h2>
-          <p className="text-[#a98a7f] text-sm leading-relaxed">
-            You will be signed out of your account. Any unsaved changes will be lost.
-          </p>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2.5">
-          <button
-            onClick={onCancel}
-            className="flex-1 cursor-pointer py-2.5 rounded-xl text-sm font-medium text-[#a98a7f] bg-[#1c1b1b] border border-[#2a2a2a] hover:bg-[#201f1f] hover:text-[#e5e2e1] hover:border-[#353534] transition-all duration-150"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            className="flex-1 py-2.5 rounded-xl cursor-pointer text-sm font-semibold text-[#050505] bg-[#FFBA44] hover:bg-[#ffca6e] border border-[#FFBA44]/40 hover:shadow-[0_4px_14px_rgba(255,186,68,0.35)] transition-all duration-150"
-          >
-            Sign out
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
-  </AnimatePresence>
-));
-LogoutConfirmModal.displayName = "LogoutConfirmModal";
 
 /* ─── Chat List Item ──────────────────────────────────── */
 const ChatItem = memo(({ chat, isActive, onSelect, onRequestDelete }) => {
@@ -392,10 +282,21 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
           )}
         </AnimatePresence>
 
-        {/* Delete modal — outside drawer so it's always on top */}
+        {/* Delete modal */}
         {pendingDelete && (
-          <DeleteConfirmModal
-            chatTitle={pendingDelete.title}
+          <ConfirmModal
+            icon={<AlertTriangle size={22} className="text-red-400" />}
+            iconBg="bg-red-500/10"
+            iconBorder="border-red-500/20"
+            title="Delete Chat?"
+            description={
+              <p>
+                <span className="text-[#e5e2e1] font-medium">{pendingDelete.title} </span>
+                will be permanently deleted. This action cannot be undone.
+              </p>
+            }
+            confirmLabel="Delete"
+            confirmClass="text-white bg-red-500/80 hover:bg-red-500 border-red-500/30 hover:border-red-500/60 hover:shadow-[0_4px_14px_rgba(239,68,68,0.3)]"
             onConfirm={handleConfirmDelete}
             onCancel={() => setPendingDelete(null)}
           />
@@ -403,7 +304,14 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
 
         {/* Logout modal */}
         {pendingLogout && (
-          <LogoutConfirmModal
+          <ConfirmModal
+            icon={<LogOut size={22} className="text-[#FFBA44]" />}
+            iconBg="bg-[#FFBA44]/10"
+            iconBorder="border-[#FFBA44]/20"
+            title="Sign out?"
+            description="You will be signed out of your account. Any unsaved changes will be lost."
+            confirmLabel="Sign out"
+            confirmClass="text-[#050505] bg-[#FFBA44] hover:bg-[#ffca6e] border-[#FFBA44]/40 hover:shadow-[0_4px_14px_rgba(255,186,68,0.35)]"
             onConfirm={() => { setPendingLogout(false); logout(); }}
             onCancel={() => setPendingLogout(false)}
           />
@@ -419,10 +327,21 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
         {sidebarContent}
       </div>
 
-      {/* Delete modal — rendered outside sidebar column */}
+      {/* Delete modal */}
       {pendingDelete && (
-        <DeleteConfirmModal
-          chatTitle={pendingDelete.title}
+        <ConfirmModal
+          icon={<AlertTriangle size={22} className="text-red-400" />}
+          iconBg="bg-[#FFBA44]/10"
+          iconBorder="border-[#FFBA44]/20"
+          title="Delete Chat?"
+          description={
+            <p>
+              <span className="text-[#e5e2e1] font-medium">{pendingDelete.title} </span>
+              will be permanently deleted. This action cannot be undone.
+            </p>
+          }
+          confirmLabel="Delete"
+          confirmClass="text-[#050505] bg-[#FFBA44] hover:bg-[#ffca6e] border-[#FFBA44]/40 hover:shadow-[0_4px_14px_rgba(255,186,68,0.35)]"
           onConfirm={handleConfirmDelete}
           onCancel={() => setPendingDelete(null)}
         />
@@ -430,7 +349,14 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
 
       {/* Logout modal */}
       {pendingLogout && (
-        <LogoutConfirmModal
+        <ConfirmModal
+          icon={<LogOut size={22} className="text-[#FFBA44]" />}
+          iconBg="bg-[#FFBA44]/10"
+          iconBorder="border-[#FFBA44]/20"
+          title="Sign out?"
+          description="You will be signed out of your account. Any unsaved changes will be lost."
+          confirmLabel="Sign out"
+          confirmClass="text-[#050505] bg-[#FFBA44] hover:bg-[#ffca6e] border-[#FFBA44]/40 hover:shadow-[0_4px_14px_rgba(255,186,68,0.35)]"
           onConfirm={() => { setPendingLogout(false); logout(); }}
           onCancel={() => setPendingLogout(false)}
         />
