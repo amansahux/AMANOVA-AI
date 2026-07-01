@@ -5,6 +5,7 @@ import Register from "../features/auth/page/Register.jsx";
 import Dashboard from "../features/chat/page/Dashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
+import SpecificChat from "../features/chat/page/SpecificChat.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -16,6 +17,14 @@ export const routes = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/chat/:chatId",
+        element: (
+          <ProtectedRoute>
+            <SpecificChat />
           </ProtectedRoute>
         ),
       },

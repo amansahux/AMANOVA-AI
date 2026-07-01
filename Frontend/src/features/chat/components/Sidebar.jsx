@@ -1,5 +1,6 @@
 import React, { useState, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   Plus,
   Search,
@@ -17,46 +18,48 @@ import { useDispatch } from "react-redux";
 import { setCurrentChat } from "../state/chat.service";
 import ConfirmModal from "./ConfirmModal";
 
-
-
 /* ─── Chat List Item ──────────────────────────────────── */
 const ChatItem = memo(({ chat, isActive, onSelect, onRequestDelete }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -10 }}
-      transition={{ duration: 0.15 }}
-      onClick={() => onSelect(chat)}
-      className={`group relative flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-all duration-150
+    <Link to={`/chat/${chat._id}`}>
+      <motion.div
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -10 }}
+        transition={{ duration: 0.15 }}
+        onClick={() => onSelect(chat)}
+        className={`group relative flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-all duration-150
         ${
           isActive
             ? "bg-[#FFBA44]/10 border border-[#FFBA44]/20"
             : "border border-transparent hover:bg-[#1c1b1b]"
         }`}
-    >
-      <MessageCircle
-        size={14}
-        className={`shrink-0 ${isActive ? "text-[#FFBA44]" : "text-[#a98a7f]"}`}
-      />
-      <span
-        className={`flex-1 text-sm truncate ${
-          isActive ? "text-[#FFBA44] font-medium" : "text-[#e5e2e1] font-normal"
-        }`}
       >
-        {(chat.title ?? "").replace(/^"|"$/g, "")}
-      </span>
+        <MessageCircle
+          size={14}
+          className={`shrink-0 ${isActive ? "text-[#FFBA44]" : "text-[#a98a7f]"}`}
+        />
+        <span
+          className={`flex-1 text-sm truncate ${
+            isActive
+              ? "text-[#FFBA44] font-medium"
+              : "text-[#e5e2e1] font-normal"
+          }`}
+        >
+          {(chat.title ?? "").replace(/^"|"$/g, "")}
+        </span>
 
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onRequestDelete(chat);
-        }}
-        className="shrink-0 p-1 cursor-pointer rounded-lg text-[#a98a7f] opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-red-500/20 hover:text-red-400 transition-all duration-150"
-      >
-        <Trash2 size={13} />
-      </button>
-    </motion.div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onRequestDelete(chat);
+          }}
+          className="shrink-0 p-1 cursor-pointer rounded-lg text-[#a98a7f] opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-red-500/20 hover:text-red-400 transition-all duration-150"
+        >
+          <Trash2 size={13} />
+        </button>
+      </motion.div>
+    </Link>
   );
 });
 ChatItem.displayName = "ChatItem";
@@ -279,7 +282,9 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
             title="Delete Chat?"
             description={
               <p>
-                <span className="text-[#e5e2e1] font-medium">{pendingDelete.title} </span>
+                <span className="text-[#e5e2e1] font-medium">
+                  {pendingDelete.title}{" "}
+                </span>
                 will be permanently deleted. This action cannot be undone.
               </p>
             }
@@ -300,7 +305,10 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
             description="You will be signed out of your account. Any unsaved changes will be lost."
             confirmLabel="Sign out"
             confirmClass="text-[#050505] bg-[#FFBA44] hover:bg-[#ffca6e] border-[#FFBA44]/40 hover:shadow-[0_4px_14px_rgba(255,186,68,0.35)]"
-            onConfirm={() => { setPendingLogout(false); logout(); }}
+            onConfirm={() => {
+              setPendingLogout(false);
+              logout();
+            }}
             onCancel={() => setPendingLogout(false)}
           />
         )}
@@ -324,7 +332,9 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
           title="Delete Chat?"
           description={
             <p>
-              <span className="text-[#e5e2e1] font-medium">{pendingDelete.title} </span>
+              <span className="text-[#e5e2e1] font-medium">
+                {pendingDelete.title}{" "}
+              </span>
               will be permanently deleted. This action cannot be undone.
             </p>
           }
@@ -345,7 +355,10 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
           description="You will be signed out of your account. Any unsaved changes will be lost."
           confirmLabel="Sign out"
           confirmClass="text-[#050505] bg-[#FFBA44] hover:bg-[#ffca6e] border-[#FFBA44]/40 hover:shadow-[0_4px_14px_rgba(255,186,68,0.35)]"
-          onConfirm={() => { setPendingLogout(false); logout(); }}
+          onConfirm={() => {
+            setPendingLogout(false);
+            logout();
+          }}
           onCancel={() => setPendingLogout(false)}
         />
       )}
