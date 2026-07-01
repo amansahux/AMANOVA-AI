@@ -3,7 +3,7 @@ import App from "./App.jsx";
 import Login from "../features/auth/page/Login.jsx";
 import Register from "../features/auth/page/Register.jsx";
 import Dashboard from "../features/chat/page/Dashboard.jsx";
-import { EmptyState } from "../features/chat/components/ChatCanvas.jsx";
+import { HomeChatRoute } from "../features/chat/components/ChatCanvas.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
 import SpecificChat from "../features/chat/page/SpecificChat.jsx";
@@ -23,7 +23,7 @@ export const routes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <EmptyState />
+            element: <HomeChatRoute />
           },
           {
             path: "chat/:chatId",

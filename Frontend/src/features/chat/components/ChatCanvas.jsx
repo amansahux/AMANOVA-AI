@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Message from "./Message";
 import { Sparkles } from "lucide-react";
 import { useSelector } from "react-redux";
+import { useOutletContext } from "react-router-dom";
 
 const TypingIndicator = () => (
   <motion.div
@@ -55,6 +56,19 @@ export const EmptyState = () => (
     </motion.div>
   </div>
 );
+
+export const HomeChatRoute = () => {
+  const isSending = useSelector((state) => state.chat.isSending);
+  const currentChat = useSelector((state) => state.chat.currentChat);
+  const { handleRegenerate } = useOutletContext();
+
+  // If a message is currently sending (temp optimistic message) or there are already messages,
+  // we immediately show the ChatCanvas instead of the EmptyState.
+  if (isSending || (currentChat?.messages && currentChat.messages.length > 0)) {
+    return <ChatCanvas onRegenerate={handleRegenerate} />;
+  }
+  return <EmptyState />;
+};
 
 const ChatCanvas = ({ onRegenerate }) => {
   const bottomRef = useRef(null);
