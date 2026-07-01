@@ -4,16 +4,9 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion } from "framer-motion";
-import {
-  Copy,
-  Check,
-  ThumbsUp,
-  ThumbsDown,
-  RefreshCw,
-  Sparkles,
-} from "lucide-react";
+import { Copy, Check, ThumbsUp, ThumbsDown, RefreshCw, Sparkles } from "lucide-react";
 
-// Code block with copy button
+/* ─── Code Block ──────────────────────────────────────── */
 const CodeBlock = memo(({ language, children }) => {
   const [copied, setCopied] = useState(false);
 
@@ -24,53 +17,22 @@ const CodeBlock = memo(({ language, children }) => {
   };
 
   return (
-    <div
-      className="relative rounded-xl overflow-hidden my-3"
-      style={{ border: "1px solid #2a2a2a" }}
-    >
+    <div className="relative rounded-xl overflow-hidden my-3 border border-[#2a2a2a]">
       {/* Header bar */}
-      <div
-        className="flex items-center justify-between px-4 py-2"
-        style={{ backgroundColor: "#1c1b1b", borderBottom: "1px solid #2a2a2a" }}
-      >
-        <span className="text-xs font-mono" style={{ color: "#a98a7f" }}>
-          {language || "code"}
-        </span>
+      <div className="flex items-center justify-between px-4 py-2 bg-[#1c1b1b] border-b border-[#2a2a2a]">
+        <span className="text-xs font-mono text-[#a98a7f]">{language || "code"}</span>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg transition-all duration-150"
-          style={{
-            color: copied ? "#FFBA44" : "#a98a7f",
-            backgroundColor: copied
-              ? "rgba(255,186,68,0.1)"
-              : "transparent",
-          }}
-          onMouseEnter={(e) => {
-            if (!copied) {
-              e.currentTarget.style.backgroundColor = "#201f1f";
-              e.currentTarget.style.color = "#e5e2e1";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!copied) {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.color = "#a98a7f";
-            }
-          }}
+          className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg transition-all duration-150
+            ${copied
+              ? "text-[#FFBA44] bg-[#FFBA44]/10"
+              : "text-[#a98a7f] hover:bg-[#201f1f] hover:text-[#e5e2e1]"
+            }`}
         >
-          {copied ? (
-            <>
-              <Check size={12} />
-              Copied
-            </>
-          ) : (
-            <>
-              <Copy size={12} />
-              Copy
-            </>
-          )}
+          {copied ? <><Check size={12} />Copied</> : <><Copy size={12} />Copy</>}
         </button>
       </div>
+
       <SyntaxHighlighter
         style={vscDarkPlus}
         language={language}
@@ -90,7 +52,7 @@ const CodeBlock = memo(({ language, children }) => {
 });
 CodeBlock.displayName = "CodeBlock";
 
-// Markdown components
+/* ─── Markdown element map ────────────────────────────── */
 const markdownComponents = {
   code({ node, inline, className, children, ...props }) {
     const match = /language-(\w+)/.exec(className || "");
@@ -98,166 +60,74 @@ const markdownComponents = {
       <CodeBlock language={match[1]}>{children}</CodeBlock>
     ) : (
       <code
-        className="px-1.5 py-0.5 rounded text-xs font-mono"
-        style={{
-          backgroundColor: "#1c1b1b",
-          color: "#FFBA44",
-          border: "1px solid #2a2a2a",
-        }}
+        className="px-1.5 py-0.5 rounded text-xs font-mono bg-[#1c1b1b] text-[#FFBA44] border border-[#2a2a2a]"
         {...props}
       >
         {children}
       </code>
     );
   },
-  p({ children }) {
-    return (
-      <p className="mb-3 last:mb-0 leading-7" style={{ color: "#e5e2e1" }}>
-        {children}
-      </p>
-    );
-  },
-  h1({ children }) {
-    return (
-      <h1
-        className="text-xl font-bold mb-3 mt-4"
-        style={{ color: "#e5e2e1" }}
-      >
-        {children}
-      </h1>
-    );
-  },
-  h2({ children }) {
-    return (
-      <h2
-        className="text-lg font-semibold mb-2 mt-4"
-        style={{ color: "#e5e2e1" }}
-      >
-        {children}
-      </h2>
-    );
-  },
-  h3({ children }) {
-    return (
-      <h3
-        className="text-base font-semibold mb-2 mt-3"
-        style={{ color: "#e5e2e1" }}
-      >
-        {children}
-      </h3>
-    );
-  },
-  ul({ children }) {
-    return (
-      <ul
-        className="mb-3 pl-5 space-y-1 list-disc"
-        style={{ color: "#e5e2e1" }}
-      >
-        {children}
-      </ul>
-    );
-  },
-  ol({ children }) {
-    return (
-      <ol
-        className="mb-3 pl-5 space-y-1 list-decimal"
-        style={{ color: "#e5e2e1" }}
-      >
-        {children}
-      </ol>
-    );
-  },
-  li({ children }) {
-    return (
-      <li className="leading-6" style={{ color: "#e5e2e1" }}>
-        {children}
-      </li>
-    );
-  },
-  blockquote({ children }) {
-    return (
-      <blockquote
-        className="pl-4 py-1 my-3 rounded-r-lg italic"
-        style={{
-          borderLeft: "3px solid #FFBA44",
-          backgroundColor: "rgba(255,186,68,0.05)",
-          color: "#e2bfb3",
-        }}
-      >
-        {children}
-      </blockquote>
-    );
-  },
-  table({ children }) {
-    return (
-      <div className="overflow-x-auto my-4 rounded-xl" style={{ border: "1px solid #2a2a2a" }}>
-        <table className="w-full border-collapse">{children}</table>
-      </div>
-    );
-  },
-  thead({ children }) {
-    return (
-      <thead style={{ backgroundColor: "#1c1b1b" }}>{children}</thead>
-    );
-  },
-  th({ children }) {
-    return (
-      <th
-        className="px-4 py-2.5 text-left text-sm font-semibold"
-        style={{
-          color: "#e5e2e1",
-          borderBottom: "1px solid #2a2a2a",
-        }}
-      >
-        {children}
-      </th>
-    );
-  },
-  td({ children }) {
-    return (
-      <td
-        className="px-4 py-2.5 text-sm"
-        style={{
-          color: "#e5e2e1",
-          borderBottom: "1px solid #201f1f",
-        }}
-      >
-        {children}
-      </td>
-    );
-  },
-  hr() {
-    return <hr style={{ borderColor: "#201f1f", margin: "16px 0" }} />;
-  },
-  a({ href, children }) {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="underline transition-colors duration-150"
-        style={{ color: "#FFBA44" }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = "#ff7d3c";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = "#FFBA44";
-        }}
-      >
-        {children}
-      </a>
-    );
-  },
-  strong({ children }) {
-    return (
-      <strong className="font-semibold" style={{ color: "#e5e2e1" }}>
-        {children}
-      </strong>
-    );
-  },
+  p: ({ children }) => (
+    <p className="mb-3 last:mb-0 leading-7 text-[#e5e2e1]">{children}</p>
+  ),
+  h1: ({ children }) => (
+    <h1 className="text-xl font-bold mb-3 mt-4 text-[#e5e2e1]">{children}</h1>
+  ),
+  h2: ({ children }) => (
+    <h2 className="text-lg font-semibold mb-2 mt-4 text-[#e5e2e1]">{children}</h2>
+  ),
+  h3: ({ children }) => (
+    <h3 className="text-base font-semibold mb-2 mt-3 text-[#e5e2e1]">{children}</h3>
+  ),
+  ul: ({ children }) => (
+    <ul className="mb-3 pl-5 space-y-1 list-disc text-[#e5e2e1]">{children}</ul>
+  ),
+  ol: ({ children }) => (
+    <ol className="mb-3 pl-5 space-y-1 list-decimal text-[#e5e2e1]">{children}</ol>
+  ),
+  li: ({ children }) => (
+    <li className="leading-6 text-[#e5e2e1]">{children}</li>
+  ),
+  blockquote: ({ children }) => (
+    <blockquote className="pl-4 py-1 my-3 rounded-r-lg italic border-l-[3px] border-[#FFBA44] bg-[#FFBA44]/5 text-[#e2bfb3]">
+      {children}
+    </blockquote>
+  ),
+  table: ({ children }) => (
+    <div className="overflow-x-auto my-4 rounded-xl border border-[#2a2a2a]">
+      <table className="w-full border-collapse">{children}</table>
+    </div>
+  ),
+  thead: ({ children }) => (
+    <thead className="bg-[#1c1b1b]">{children}</thead>
+  ),
+  th: ({ children }) => (
+    <th className="px-4 py-2.5 text-left text-sm font-semibold text-[#e5e2e1] border-b border-[#2a2a2a]">
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td className="px-4 py-2.5 text-sm text-[#e5e2e1] border-b border-[#201f1f]">
+      {children}
+    </td>
+  ),
+  hr: () => <hr className="border-[#201f1f] my-4" />,
+  a: ({ href, children }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline text-[#FFBA44] hover:text-[#ff7d3c] transition-colors duration-150"
+    >
+      {children}
+    </a>
+  ),
+  strong: ({ children }) => (
+    <strong className="font-semibold text-[#e5e2e1]">{children}</strong>
+  ),
 };
 
-// Single message component
+/* ─── Single Message ──────────────────────────────────── */
 const Message = memo(({ message, isLast, onRegenerate }) => {
   const isUser = message.role === "user";
   const [liked, setLiked] = useState(false);
@@ -270,6 +140,7 @@ const Message = memo(({ message, isLast, onRegenerate }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  /* User bubble */
   if (isUser) {
     return (
       <motion.div
@@ -278,21 +149,14 @@ const Message = memo(({ message, isLast, onRegenerate }) => {
         transition={{ duration: 0.2 }}
         className="flex justify-end mb-5"
       >
-        <div
-          className="max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-7"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(255,186,68,0.15) 0%, rgba(255,125,60,0.08) 100%)",
-            border: "1px solid rgba(255,186,68,0.2)",
-            color: "#e5e2e1",
-          }}
-        >
+        <div className="max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-7 text-[#e5e2e1] bg-gradient-to-br from-[#FFBA44]/15 to-[#ff7d3c]/8 border border-[#FFBA44]/20">
           {message.content}
         </div>
       </motion.div>
     );
   }
 
+  /* AI bubble */
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -300,104 +164,57 @@ const Message = memo(({ message, isLast, onRegenerate }) => {
       transition={{ duration: 0.2 }}
       className="flex gap-3 mb-6 group"
     >
-      {/* AI Avatar */}
-      <div
-        className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
-        style={{
-          background: "linear-gradient(135deg, #FFBA44 0%, #ff7d3c 100%)",
-        }}
-      >
+      {/* Avatar */}
+      <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 mt-0.5 bg-gradient-to-br from-[#FFBA44] to-[#ff7d3c]">
         <Sparkles size={13} className="text-white" />
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="text-sm prose prose-invert max-w-none">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={markdownComponents}
-          >
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
             {message.content || ""}
           </ReactMarkdown>
         </div>
 
-        {/* Action row */}
-        <div
-          className="flex items-center gap-1 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-        >
+        {/* Action row — visible on group hover */}
+        <div className="flex items-center gap-1 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+          {/* Copy */}
           <button
             onClick={handleCopy}
             title="Copy"
-            className="p-1.5 rounded-lg transition-all duration-150"
-            style={{
-              color: copied ? "#FFBA44" : "#a98a7f",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#1c1b1b";
-              if (!copied) e.currentTarget.style.color = "#e5e2e1";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              if (!copied) e.currentTarget.style.color = "#a98a7f";
-            }}
+            className={`p-1.5 rounded-lg transition-all duration-150 hover:bg-[#1c1b1b]
+              ${copied ? "text-[#FFBA44]" : "text-[#a98a7f] hover:text-[#e5e2e1]"}`}
           >
             {copied ? <Check size={14} /> : <Copy size={14} />}
           </button>
 
+          {/* Like */}
           <button
-            onClick={() => {
-              setLiked(!liked);
-              setDisliked(false);
-            }}
+            onClick={() => { setLiked(!liked); setDisliked(false); }}
             title="Like"
-            className="p-1.5 rounded-lg transition-all duration-150"
-            style={{ color: liked ? "#FFBA44" : "#a98a7f" }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#1c1b1b";
-              if (!liked) e.currentTarget.style.color = "#e5e2e1";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              if (!liked) e.currentTarget.style.color = "#a98a7f";
-            }}
+            className={`p-1.5 rounded-lg transition-all duration-150 hover:bg-[#1c1b1b]
+              ${liked ? "text-[#FFBA44]" : "text-[#a98a7f] hover:text-[#e5e2e1]"}`}
           >
             <ThumbsUp size={14} />
           </button>
 
+          {/* Dislike */}
           <button
-            onClick={() => {
-              setDisliked(!disliked);
-              setLiked(false);
-            }}
+            onClick={() => { setDisliked(!disliked); setLiked(false); }}
             title="Dislike"
-            className="p-1.5 rounded-lg transition-all duration-150"
-            style={{ color: disliked ? "#ff6464" : "#a98a7f" }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#1c1b1b";
-              if (!disliked) e.currentTarget.style.color = "#e5e2e1";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              if (!disliked) e.currentTarget.style.color = "#a98a7f";
-            }}
+            className={`p-1.5 rounded-lg transition-all duration-150 hover:bg-[#1c1b1b]
+              ${disliked ? "text-red-400" : "text-[#a98a7f] hover:text-[#e5e2e1]"}`}
           >
             <ThumbsDown size={14} />
           </button>
 
+          {/* Regenerate */}
           {isLast && onRegenerate && (
             <button
               onClick={onRegenerate}
               title="Regenerate"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150"
-              style={{ color: "#a98a7f" }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#1c1b1b";
-                e.currentTarget.style.color = "#e5e2e1";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.color = "#a98a7f";
-              }}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-[#a98a7f] hover:bg-[#1c1b1b] hover:text-[#e5e2e1] transition-all duration-150"
             >
               <RefreshCw size={13} />
               Regenerate
