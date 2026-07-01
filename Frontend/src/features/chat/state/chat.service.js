@@ -5,8 +5,9 @@ const chatSlice = createSlice({
   initialState: {
     chats: [],
     currentChat: null,
-    isSending: false,
     isLoadingChats: false,
+    isLoadingMessages: false,
+    isSending: false,
     error: null,
   },
   reducers: {
@@ -25,6 +26,9 @@ const chatSlice = createSlice({
     setIsLoadingChats: (state, action) => {
       state.isLoadingChats = action.payload;
     },
+    setIsLoadingMessages: (state, action) => {
+      state.isLoadingMessages = action.payload;
+    },
 
     setError: (state, action) => {
       state.error = action.payload;
@@ -41,4 +45,3 @@ export const {
   setIsLoadingMessages,
   setError,
 } = chatSlice.actions;
-

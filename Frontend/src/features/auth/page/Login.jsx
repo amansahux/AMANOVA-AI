@@ -11,7 +11,7 @@ import AuthError from "../components/AuthError";
 import AuthDivider from "../components/AuthDivider";
 import GoogleButton from "../components/GoogleButton";
 import { loginSchema } from "../validator/auth.validator";
-import useToast from "../../../shared/toast/useToast";
+import useToast from "../../../shared/toast/useToast.js";
 
 const Login = () => {
   const navigate = useNavigate();

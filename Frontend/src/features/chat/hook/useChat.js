@@ -9,18 +9,26 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   setChats,
-  setIsLoadingChats,
   setCurrentChat,
   setError,
   setIsSending,
   setIsLoadingChats,
+  setIsLoadingMessages,
 } from "../state/chat.service.js";
+import useToast from "../../../shared/toast/useToast.js";
+import { handleError } from "../utils/handleError.js";
 
 export const useChat = () => {
-  const { chats, currentChat, error, isSending, isLoadingChats } = useSelector(
-    (state) => state.chat,
-  );
+  const {
+    chats,
+    currentChat,
+    error,
+    isSending,
+    isLoadingChats,
+    isLoadingMessages,
+  } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const handleGetChats = async () => {
     try {
@@ -28,36 +36,43 @@ export const useChat = () => {
       const response = await getChats();
       dispatch(setChats(response));
     } catch (error) {
-      console.error(error);
-      throw error;
+      handleError(error, dispatch, toast);
     } finally {
       dispatch(setIsLoadingChats(false));
     }
   };
-
   const handleGetMessages = async ({ chatId }) => {
     try {
-      dispatch(isLoadingChats(true));
+      dispatch(setIsLoadingMessages(true));
       const response = await getMessages({ chatId });
       dispatch(setCurrentChat(response));
     } catch (error) {
-      console.error(error);
-      throw error;
+      handleError(error, dispatch, toast);
     } finally {
-      dispatch(isLoadingChats(false));
+      dispatch(setIsLoadingMessages(false));
     }
   };
   const handleDeleteChat = async ({ chatId }) => {
     try {
       dispatch(setIsLoadingChats(true));
       await deleteChat({ chatId });
-      handleGetChats();
-      dispatch(setCurrentChat(null));
+      await handleGetChats();
     } catch (error) {
-      console.error(error);
-      throw error;
+      handleError(error, dispatch, toast);
     } finally {
       dispatch(setIsLoadingChats(false));
+    }
+  };
+  const handleSendMessage = async ({ content, chatId }) => {
+    try {
+      dispatch(setIsSending(true));
+      const response = await sendMessage({ content, chatId });
+      await handleGetChats();
+      if (response?.chat?.id) dispatch(setCurrentChat(response));
+    } catch (error) {
+      handleError(error, dispatch, toast);
+    } finally {
+      dispatch(setIsSending(false));
     }
   };
 
@@ -66,11 +81,13 @@ export const useChat = () => {
     handleGetChats,
     handleGetMessages,
     handleDeleteChat,
+    handleSendMessage,
     chats,
     currentChat,
     error,
     isSending,
     isLoadingChats,
+    isLoadingMessages,
   };
 };
 
