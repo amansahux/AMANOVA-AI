@@ -164,11 +164,7 @@ const Message = memo(({ message, isLast, onRegenerate }) => {
       transition={{ duration: 0.2 }}
       className="flex gap-3 mb-6 group"
     >
-      {/* Avatar */}
-      <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 mt-0.5 bg-gradient-to-br from-[#FFBA44] to-[#ff7d3c]">
-        <Sparkles size={13} className="text-white" />
-      </div>
-
+      
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="text-sm prose prose-invert max-w-none">
