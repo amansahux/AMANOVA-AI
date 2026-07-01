@@ -41,15 +41,15 @@ export const useChat = () => {
       dispatch(setIsLoadingChats(false));
     }
   };
-  const handleGetMessages = async ({ chatId }) => {
+  const handleGetMessages = async ({ chatId, background = false }) => {
     try {
-      dispatch(setIsLoadingMessages(true));
+      if (!background) dispatch(setIsLoadingMessages(true));
       const response = await getMessages({ chatId });
       dispatch(setCurrentChat(response));
     } catch (error) {
       handleError(error, dispatch, toast);
     } finally {
-      dispatch(setIsLoadingMessages(false));
+      if (!background) dispatch(setIsLoadingMessages(false));
     }
   };
   const handleDeleteChat = async ({ chatId }) => {
@@ -96,7 +96,7 @@ export const useChat = () => {
       
       const realChatId = response?.chat?._id || response?.chat?.id;
       if (realChatId) {
-        await handleGetMessages({ chatId: realChatId });
+        await handleGetMessages({ chatId: realChatId, background: true });
         return realChatId;
       }
     } catch (error) {
