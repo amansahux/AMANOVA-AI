@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion } from "framer-motion";
-import { Copy, Check, ThumbsUp, ThumbsDown, RefreshCw, Sparkles } from "lucide-react";
+import { Copy, Check, ThumbsUp, ThumbsDown, RefreshCw, } from "lucide-react";
 
 /* ─── Code Block ──────────────────────────────────────── */
 const CodeBlock = memo(({ language, children }) => {
@@ -164,7 +164,7 @@ const Message = memo(({ message, isLast, onRegenerate }) => {
       transition={{ duration: 0.2 }}
       className="flex gap-3 mb-6 group"
     >
-      
+
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="text-sm prose prose-invert max-w-none">

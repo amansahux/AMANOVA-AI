@@ -6,35 +6,20 @@ import { useSelector } from "react-redux";
 
 const TypingIndicator = () => (
   <motion.div
-    initial={{ opacity: 0, y: 8 }}
+    initial={{ opacity: 0, y: 5 }}
     animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: 8 }}
-    className="flex gap-3 mb-6"
+    exit={{ opacity: 0, scale: 0.8 }}
+    className="flex mb-6 ml-1"
   >
-    <div
-      className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0"
-      style={{
-        background: "linear-gradient(135deg, #FFBA44 0%, #ff7d3c 100%)",
+    <motion.div
+      animate={{ scale: [1, 1.35, 1], opacity: [0.5, 1, 0.5] }}
+      transition={{
+        duration: 1.2,
+        repeat: Infinity,
+        ease: "easeInOut",
       }}
-    >
-      <Sparkles size={13} className="text-white" />
-    </div>
-    <div className="flex items-center gap-2 pt-1">
-      {[0, 1, 2].map((i) => (
-        <motion.div
-          key={i}
-          animate={{ y: [0, -5, 0] }}
-          transition={{
-            duration: 0.6,
-            repeat: Infinity,
-            delay: i * 0.15,
-            ease: "easeInOut",
-          }}
-          className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: "#FFBA44" }}
-        />
-      ))}
-    </div>
+      className="w-[11px] h-[11px] rounded-full mt-1.5 bg-[#FFBA44] shadow-[0_0_10px_rgba(255,186,68,0.4)]"
+    />
   </motion.div>
 );
 
@@ -63,32 +48,10 @@ const EmptyState = () => (
       >
         How can I help you today?
       </h2>
-      <p className="text-sm max-w-sm" style={{ color: "#a98a7f" }}>
+      <p className="text-sm " style={{ color: "#a98a7f" }}>
         Start a conversation with AMANOVA AI. Ask me anything — I'm here to
         assist.
       </p>
-
-      {/* Suggestion chips */}
-      <div className="flex flex-wrap gap-2.5 justify-center mt-6">
-        {[
-          "Explain quantum computing",
-          "Write a React component",
-          "Summarize a document",
-          "Debug my code",
-        ].map((suggestion) => (
-          <div
-            key={suggestion}
-            className="px-4 py-2 rounded-xl text-sm cursor-default transition-all duration-150"
-            style={{
-              backgroundColor: "#1c1b1b",
-              border: "1px solid #2a2a2a",
-              color: "#e2bfb3",
-            }}
-          >
-            {suggestion}
-          </div>
-        ))}
-      </div>
     </motion.div>
   </div>
 );
@@ -110,23 +73,26 @@ const ChatCanvas = ({ onRegenerate }) => {
 
   if (isLoadingMessages) {
     return (
-      <div className="flex-1 flex items-center justify-center overflow-hidden">
-        <motion.div
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="flex items-center gap-3"
-          style={{ color: "#a98a7f" }}
-        >
-          <div
-            className="w-6 h-6 rounded-xl flex items-center justify-center"
-            style={{
-              background: "linear-gradient(135deg, #FFBA44 0%, #ff7d3c 100%)",
-            }}
-          >
-            <Sparkles size={12} className="text-white" />
-          </div>
-          <span className="text-sm">Loading messages...</span>
-        </motion.div>
+      <div className="flex-1 overflow-hidden px-4 py-6">
+        <div className="max-w-3xl mx-auto flex flex-col gap-8 opacity-60">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="flex flex-col gap-6">
+              {/* User message skeleton */}
+              <div className="flex justify-end">
+                <div className="w-[60%] sm:w-[45%] h-[52px] rounded-2xl animate-pulse bg-[#1c1b1b]" />
+              </div>
+
+              {/* AI message skeleton */}
+              <div className="flex gap-3">
+                <div className="flex-1 space-y-3 pt-2">
+                  <div className="h-4 w-[90%] rounded animate-pulse bg-[#1c1b1b]" />
+                  <div className="h-4 w-[75%] rounded animate-pulse bg-[#1c1b1b]" />
+                  <div className="h-4 w-[85%] rounded animate-pulse bg-[#1c1b1b]" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
