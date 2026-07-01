@@ -32,6 +32,8 @@ const Dashboard = () => {
   }, []);
 
   const currentChatTitle = currentChat?.title
+    ? String(currentChat.title).replace(/^"|"$/g, "")
+    : null;
   const currentChatId = currentChat?.chatId
 
   const handleSend = useCallback(

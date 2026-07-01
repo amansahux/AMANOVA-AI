@@ -29,7 +29,6 @@ export const useChat = () => {
   } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const toast = useToast();
-  console.log(currentChat)
 
   const handleGetChats = async () => {
     try {

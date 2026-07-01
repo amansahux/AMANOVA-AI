@@ -1,12 +1,12 @@
 import React, { useState, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Plus, Search, MessageSquare, Trash2,
+  Plus, Search, MessageCircle, Trash2,
   Settings, LogOut, X, Sparkles,
 } from "lucide-react";
 import useChat from "../hook/useChat";
 import useAuth from "../../auth/hook/useAuth";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { setCurrentChat } from "../state/chat.service";
 
 /* ─── Chat List Item ──────────────────────────────────── */
@@ -28,7 +28,7 @@ const ChatItem = memo(({ chat, isActive, onSelect, onDelete }) => {
           : "border border-transparent hover:bg-[#1c1b1b]"
         }`}
     >
-      <MessageSquare
+      <MessageCircle
         size={14}
         className={`shrink-0 ${isActive ? "text-[#FFBA44]" : "text-[#a98a7f]"}`}
       />
@@ -97,7 +97,7 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
       <div className="flex-none px-4 pt-5 pb-3 space-y-3">
 
         {/* Logo row */}
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#FFBA44] to-[#ff7d3c]">
               <Sparkles size={16} className="text-white" />
@@ -128,7 +128,7 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
         </button>
 
         {/* Search */}
-        <div className="relative">
+        <div className="relative mt-3">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a98a7f] pointer-events-none" />
           <input
             type="text"
@@ -157,7 +157,7 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
           </div>
         ) : filteredChats.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 gap-2 text-center text-[#a98a7f]">
-            <MessageSquare size={28} className="opacity-40" />
+            <MessageCircle size={28} className="opacity-40" />
             <p className="text-sm opacity-70">
               {searchQuery ? "No chats found" : "No chats yet"}
             </p>
