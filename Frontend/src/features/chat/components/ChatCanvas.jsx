@@ -23,7 +23,7 @@ const TypingIndicator = () => (
   </motion.div>
 );
 
-const EmptyState = () => (
+export const EmptyState = () => (
   <div className="flex flex-col items-center justify-center h-full text-center px-6">
     <motion.div
       initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -102,11 +102,8 @@ const ChatCanvas = ({ onRegenerate }) => {
       className="flex-1 overflow-y-auto chat-scroll"
       style={{ minHeight: 0 }}
     >
-      {messages.length === 0 && !isSending ? (
-        <EmptyState />
-      ) : (
-        <div className="max-w-3xl mx-auto px-4 py-6">
-          <AnimatePresence mode="popLayout">
+      <div className="max-w-3xl mx-auto px-4 py-6">
+        <AnimatePresence mode="popLayout">
             {messages.map((msg, idx) => (
               <Message
                 key={msg._id || msg.id || idx}
@@ -122,9 +119,8 @@ const ChatCanvas = ({ onRegenerate }) => {
             {isSending && <TypingIndicator />}
           </AnimatePresence>
 
-          <div ref={bottomRef} />
-        </div>
-      )}
+        <div ref={bottomRef} />
+      </div>
     </div>
   );
 };

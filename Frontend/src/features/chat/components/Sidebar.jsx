@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Plus,
   Search,
@@ -79,6 +79,7 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
   } = useChat();
   const { user, logout } = useAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const filteredChats = (chats ?? []).filter((chat) =>
     (chat.title ?? "New Chat")
@@ -88,7 +89,7 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
 
   const handleSelectChat = useCallback(
     (chat) => {
-      handleGetMessages({ chatId: chat._id || chat.id });
+      // handleGetMessages({ chatId: chat._id || chat.id });
       if (isMobile && onClose) onClose();
     },
     [handleGetMessages, isMobile, onClose],
@@ -110,8 +111,9 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
 
   const handleNewChat = useCallback(() => {
     dispatch(setCurrentChat(null));
+    navigate("/");
     if (isMobile && onClose) onClose();
-  }, [dispatch, isMobile, onClose]);
+  }, [dispatch, navigate, isMobile, onClose]);
 
   /* ── Shared sidebar DOM ── */
   const sidebarContent = (

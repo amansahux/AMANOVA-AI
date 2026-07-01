@@ -68,7 +68,10 @@ export const useChat = () => {
       dispatch(setIsSending(true));
       const response = await sendMessage({ content, chatId });
       if (!chatId) await handleGetChats();
-      if (response?.chat?.id) dispatch(setCurrentChat(response));
+      if (response?.chat?._id || response?.chat?.id) {
+        dispatch(setCurrentChat(response));
+        return response.chat._id || response.chat.id;
+      }
     } catch (error) {
       handleError(error, dispatch, toast);
     } finally {

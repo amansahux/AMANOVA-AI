@@ -1,13 +1,14 @@
+import { Outlet, useNavigate } from "react-router-dom";
 import React, { useEffect, useState, useCallback } from "react";
 import useChat from "../hook/useChat";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import ChatCanvas from "../components/ChatCanvas";
 import PromptInput from "../components/PromptInput";
 
 const Dashboard = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
 
   const {
     initializedSocketConnection,
@@ -37,8 +38,13 @@ const Dashboard = () => {
   const currentChatId = currentChat?.chatId
 
   const handleSend = useCallback(
-    (content) => handleSendMessage({ content, chatId: currentChatId }),
-    [handleSendMessage, currentChatId]
+    async (content) => {
+      const newChatId = await handleSendMessage({ content, chatId: currentChatId });
+      if (newChatId && !currentChatId) {
+        navigate(`/chat/${newChatId}`);
+      }
+    },
+    [handleSendMessage, currentChatId, navigate]
   );
 
   const messages = currentChat?.messages || [];
@@ -70,7 +76,7 @@ const Dashboard = () => {
           currentChatTitle={currentChatTitle}
           onMenuToggle={() => setIsMobileSidebarOpen(true)}
         />
-        <ChatCanvas onRegenerate={handleRegenerate} />
+        <Outlet context={{ handleRegenerate }} />
         <PromptInput onSend={handleSend} />
       </div>
     </div>
