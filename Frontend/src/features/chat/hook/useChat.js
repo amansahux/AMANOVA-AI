@@ -65,12 +65,39 @@ export const useChat = () => {
   };
   const handleSendMessage = async ({ content, chatId }) => {
     try {
+      // 1. Optimistic UI update: show user's message immediately
+      const tempUserMessage = {
+        _id: Date.now().toString(),
+        content,
+        role: "user",
+      };
+
+      if (currentChat && (currentChat._id === chatId || currentChat.id === chatId || !chatId)) {
+        dispatch(
+          setCurrentChat({
+            ...currentChat,
+            messages: [...(currentChat.messages || []), tempUserMessage],
+          })
+        );
+      } else {
+        dispatch(
+          setCurrentChat({
+            _id: chatId || "temp",
+            messages: [tempUserMessage],
+          })
+        );
+      }
+
       dispatch(setIsSending(true));
       const response = await sendMessage({ content, chatId });
+      
+      // 2. Fetch fresh chat lists and messages to resolve UI properly
       if (!chatId) await handleGetChats();
-      if (response?.chat?._id || response?.chat?.id) {
-        dispatch(setCurrentChat(response));
-        return response.chat._id || response.chat.id;
+      
+      const realChatId = response?.chat?._id || response?.chat?.id;
+      if (realChatId) {
+        await handleGetMessages({ chatId: realChatId });
+        return realChatId;
       }
     } catch (error) {
       handleError(error, dispatch, toast);
