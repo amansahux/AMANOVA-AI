@@ -21,8 +21,6 @@ import ConfirmModal from "./ConfirmModal";
 
 /* ─── Chat List Item ──────────────────────────────────── */
 const ChatItem = memo(({ chat, isActive, onSelect, onRequestDelete }) => {
-  const [showDelete, setShowDelete] = useState(false);
-
   return (
     <motion.div
       initial={{ opacity: 0, x: -10 }}
@@ -30,8 +28,6 @@ const ChatItem = memo(({ chat, isActive, onSelect, onRequestDelete }) => {
       exit={{ opacity: 0, x: -10 }}
       transition={{ duration: 0.15 }}
       onClick={() => onSelect(chat)}
-      onMouseEnter={() => setShowDelete(true)}
-      onMouseLeave={() => setShowDelete(false)}
       className={`group relative flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-all duration-150
         ${
           isActive
@@ -51,23 +47,15 @@ const ChatItem = memo(({ chat, isActive, onSelect, onRequestDelete }) => {
         {(chat.title ?? "").replace(/^"|"$/g, "")}
       </span>
 
-      <AnimatePresence>
-        {showDelete && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.1 }}
-            onClick={(e) => {
-              e.stopPropagation();
-              onRequestDelete(chat);
-            }}
-            className="shrink-0 p-1 cursor-pointer rounded-lg text-[#a98a7f] hover:bg-red-500/20 hover:text-red-400 transition-all duration-150"
-          >
-            <Trash2 size={13} />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onRequestDelete(chat);
+        }}
+        className="shrink-0 p-1 cursor-pointer rounded-lg text-[#a98a7f] opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-red-500/20 hover:text-red-400 transition-all duration-150"
+      >
+        <Trash2 size={13} />
+      </button>
     </motion.div>
   );
 });
