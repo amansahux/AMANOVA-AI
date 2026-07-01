@@ -29,7 +29,7 @@ const Header = ({ currentChatTitle, onMenuToggle }) => {
       {/* Center: Chat Title */}
       <div className="flex-1 flex items-center justify-center px-4">
         {currentChatTitle && (
-          <h1 className="text-sm font-medium truncate max-w-xs text-center text-[#e5e2e1]">
+          <h1 className="text-xs font-medium text-center text-[#a3a3a397]">
             {currentChatTitle}
           </h1>
         )}
