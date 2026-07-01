@@ -14,7 +14,7 @@ const PublicRoute = ({ children }) => {
     user &&
     (location.pathname === "/login" || location.pathname === "/register")
   ) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

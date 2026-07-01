@@ -194,8 +194,8 @@ export const googleCallback = async (req, res, next) => {
 
     return res.redirect(
       config.node_env === "development"
-        ? "http://localhost:5173/dashboard"
-        : "https://snitch-kd3p.onrender.com/dashboard",
+        ? "http://localhost:5173"
+        : "https://snitch-kd3p.onrender.com",
     );
   } catch (error) {
     console.error(error);

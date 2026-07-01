@@ -35,7 +35,7 @@ const Login = () => {
     const res = await login(payload);
     if (res?.success) {
       toast.success("Welcome back....");
-      navigate("/dashboard");
+      navigate("/");
     } else {
       toast.error(res?.message || "Invalid credentials. Please try again.");
     }
