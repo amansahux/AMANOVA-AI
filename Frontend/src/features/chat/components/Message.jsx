@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion } from "framer-motion";
-import { Copy, Check, ThumbsUp, ThumbsDown, RefreshCw, } from "lucide-react";
+import { Copy, Check, ThumbsUp, ThumbsDown, RefreshCw, Trash2, Pencil } from "lucide-react";
 
 /* ─── Code Block ──────────────────────────────────────── */
 const CodeBlock = memo(({ language, children }) => {
@@ -147,10 +147,41 @@ const Message = memo(({ message, isLast, onRegenerate }) => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
-        className="flex justify-end mb-5"
+        className="flex justify-end mb-5 group"
       >
-        <div className="max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-7 text-[#e5e2e1] bg-gradient-to-br from-[#FFBA44]/15 to-[#ff7d3c]/8 border border-[#FFBA44]/20">
-          {message.content}
+        <div className="flex flex-col items-end max-w-[75%]">
+          <div className="px-4 py-2 rounded-2xl text-sm leading-7 text-[#e5e2e1] bg-gradient-to-br from-[#FFBA44]/15 to-[#ff7d3c]/8 border border-[#FFBA44]/20">
+            {message.content}
+          </div>
+          
+          {/* Action row — visible on group hover */}
+          <div className="flex items-center gap-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+            {/* Edit (placeholder) */}
+            <button
+              title="Edit"
+              className="p-1.5 rounded-lg transition-all duration-150 text-[#a98a7f] hover:text-[#e5e2e1] hover:bg-[#1c1b1b]"
+            >
+              <Pencil size={13} />
+            </button>
+            
+            {/* Copy (functional) */}
+            <button
+              onClick={handleCopy}
+              title="Copy"
+              className={`p-1.5 rounded-lg transition-all duration-150 hover:bg-[#1c1b1b]
+                ${copied ? "text-[#FFBA44]" : "text-[#a98a7f] hover:text-[#e5e2e1]"}`}
+            >
+              {copied ? <Check size={13} /> : <Copy size={13} />}
+            </button>
+
+            {/* Delete (placeholder) */}
+            <button
+              title="Delete"
+              className="p-1.5 rounded-lg transition-all duration-150 text-[#a98a7f] hover:text-red-400 hover:bg-red-500/20"
+            >
+              <Trash2 size={13} />
+            </button>
+          </div>
         </div>
       </motion.div>
     );

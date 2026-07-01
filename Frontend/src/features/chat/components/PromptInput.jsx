@@ -103,7 +103,7 @@ const PromptInput = ({ onSend }) => {
               disabled={!canSend}
               whileTap={canSend ? { scale: 0.9 } : {}}
               className={[
-                "flex-none w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-150",
+                "flex-none w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150",
                 canSend
                   ? "bg-gradient-to-br from-[#FFBA44] to-[#ff7d3c] hover:shadow-[0_4px_14px_rgba(255,186,68,0.4)] cursor-pointer"
                   : "bg-[#1c1b1b] cursor-not-allowed",
@@ -112,7 +112,7 @@ const PromptInput = ({ onSend }) => {
               <Send
                 size={15}
                 strokeWidth={2.5}
-                className={`translate-x-[1px] ${canSend ? "text-white" : "text-[#353534]"}`}
+                className={` ${canSend ? "text-white" : "text-[#353534]"}`}
               />
             </motion.button>
           </div>
