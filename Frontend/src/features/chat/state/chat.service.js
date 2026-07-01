@@ -38,6 +38,7 @@ export const {
   setCurrentChat,
   setIsSending,
   setIsLoadingChats,
+  setIsLoadingMessages,
   setError,
 } = chatSlice.actions;
 
