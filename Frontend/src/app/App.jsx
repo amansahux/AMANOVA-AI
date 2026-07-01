@@ -23,9 +23,9 @@ const App = () => {
   }, []);
 
   return (
-      <div className="w-full min-h-screen">
-        <Outlet />
-      </div>
+    <div className="w-full min-h-screen">
+      <Outlet />
+    </div>
   );
 };
 
