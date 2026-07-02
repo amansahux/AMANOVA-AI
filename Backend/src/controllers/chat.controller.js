@@ -33,7 +33,9 @@ export const sendMessage = async (req, res, next) => {
       AiResponse = await GenerateResponse(messages);
     } catch (error) {
       await messageModel.deleteOne({ _id: userMessage._id });
-      await chatModel.deleteOne({ _id: chatId || chat._id });
+      if (!chatId && chat) {
+        await chatModel.deleteOne({ _id: chat._id });
+      }
       return res.status(503).json({
         success: false,
         message: "AI service unavailable try again later",

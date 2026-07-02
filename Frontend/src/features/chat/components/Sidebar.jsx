@@ -283,9 +283,9 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
         {/* Delete modal */}
         {pendingDelete && (
           <ConfirmModal
-            icon={<AlertTriangle size={22} className="text-red-400" />}
-            iconBg="bg-red-500/10"
-            iconBorder="border-red-500/20"
+            icon={<AlertTriangle size={22} className="text-[#FFBA44]" />}
+            iconBg="bg-[#FFBA44]/10"
+            iconBorder="border-[#FFBA44]/20"
             title="Delete Chat?"
             description={
               <p>
@@ -296,7 +296,7 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
               </p>
             }
             confirmLabel="Delete"
-            confirmClass="text-white bg-red-500/80 hover:bg-red-500 border-red-500/30 hover:border-red-500/60 hover:shadow-[0_4px_14px_rgba(239,68,68,0.3)]"
+            confirmClass="text-[#050505] bg-[#FFBA44]/80 hover:bg-[#ffca6e] border-[#FFBA44]/40 hover:shadow-[0_4px_14px_rgba(255,186,68,0.35)]"
             onConfirm={handleConfirmDelete}
             onCancel={() => setPendingDelete(null)}
           />
@@ -333,7 +333,7 @@ const Sidebar = ({ isOpen, onClose, isMobile }) => {
       {/* Delete modal */}
       {pendingDelete && (
         <ConfirmModal
-          icon={<AlertTriangle size={22} className="text-red-400" />}
+          icon={<AlertTriangle size={22} className="text-[#FFBA44]" />}
           iconBg="bg-[#FFBA44]/10"
           iconBorder="border-[#FFBA44]/20"
           title="Delete Chat?"
